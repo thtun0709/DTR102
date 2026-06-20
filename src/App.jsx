@@ -321,22 +321,42 @@ export default function App() {
 
   useReveal();
 
+  // Tối ưu hóa việc cập nhật trạng thái scrolled (chỉ set khi thay đổi trạng thái, tránh re-render liên tục)
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 60);
-
-      const sections = ["hero", "origins", "history", "features", "instruments", "classics", "modern", "conservation"];
-      const scrollPos = window.scrollY + 200;
-      for (const id of sections) {
-        const el = document.getElementById(id);
-        if (el && scrollPos >= el.offsetTop && scrollPos < el.offsetTop + el.offsetHeight) {
-          setActiveSection(id);
-          break;
-        }
-      }
+      const isScrolled = window.scrollY > 60;
+      setScrolled((prev) => {
+        if (prev !== isScrolled) return isScrolled;
+        return prev;
+      });
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Xác định active section bằng IntersectionObserver (mượt mà, chạy bất đồng bộ qua trình duyệt)
+  useEffect(() => {
+    const sections = ["hero", "origins", "history", "features", "instruments", "classics", "modern", "conservation"];
+    const observerOptions = {
+      root: null,
+      rootMargin: "-20% 0px -60% 0px", // Phát hiện khu vực nội dung đang hiển thị chính
+      threshold: 0,
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    }, observerOptions);
+
+    sections.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
   }, []);
 
   const scrollTo = (id) => {
@@ -746,20 +766,20 @@ export default function App() {
                 <Music className="w-4 h-4 text-[#5e4f3c]" />
               </div>
 
-              {/* iFrame Sketchfab */}
+              {/* iFrame Sketchfab - Chỉ render iframe khi active để tránh tràn bộ nhớ WebGL/GPU gây lag & crash trên mobile */}
               <div className="sketchfab-container flex-1" style={{ paddingTop: '60%' }}>
-                {MUSEUM_DATA.instruments.map((inst) => (
-                  <iframe
-                    key={inst.id}
-                    title={inst.name}
-                    allowFullScreen
-                    allow="autoplay; fullscreen; xr-spatial-tracking"
-                    src={`https://sketchfab.com/models/${inst.sketchfabId}/embed?autostart=1&camera=0&preload=1&theme=dark&ui_infos=0&ui_watermark=0`}
-                    style={{
-                      display: activeInstrument.id === inst.id ? 'block' : 'none',
-                    }}
-                  ></iframe>
-                ))}
+                {MUSEUM_DATA.instruments.map((inst) => {
+                  if (activeInstrument.id !== inst.id) return null;
+                  return (
+                    <iframe
+                      key={inst.id}
+                      title={inst.name}
+                      allowFullScreen
+                      allow="autoplay; fullscreen; xr-spatial-tracking"
+                      src={`https://sketchfab.com/models/${inst.sketchfabId}/embed?autostart=1&camera=0&preload=1&theme=dark&ui_infos=0&ui_watermark=0`}
+                    ></iframe>
+                  );
+                })}
               </div>
 
               {/* Info dưới viewer */}

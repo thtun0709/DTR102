@@ -243,6 +243,7 @@ body::before {
 
 .animate-spin-slow {
   animation: spin-slow 50s linear infinite;
+  will-change: transform;
 }
 
 .filter-gold {
