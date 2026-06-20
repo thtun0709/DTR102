@@ -766,20 +766,15 @@ export default function App() {
                 <Music className="w-4 h-4 text-[#5e4f3c]" />
               </div>
 
-              {/* iFrame Sketchfab - Chỉ render iframe khi active để tránh tràn bộ nhớ WebGL/GPU gây lag & crash trên mobile */}
+              {/* iFrame Sketchfab - Tái sử dụng một iframe duy nhất và cập nhật src để tránh rò rỉ bộ nhớ WebGL/GPU khi mount/unmount trên mobile */}
               <div className="sketchfab-container flex-1" style={{ paddingTop: '60%' }}>
-                {MUSEUM_DATA.instruments.map((inst) => {
-                  if (activeInstrument.id !== inst.id) return null;
-                  return (
-                    <iframe
-                      key={inst.id}
-                      title={inst.name}
-                      allowFullScreen
-                      allow="autoplay; fullscreen; xr-spatial-tracking"
-                      src={`https://sketchfab.com/models/${inst.sketchfabId}/embed?autostart=1&camera=0&preload=1&theme=dark&ui_infos=0&ui_watermark=0`}
-                    ></iframe>
-                  );
-                })}
+                <iframe
+                  key="sketchfab-single-viewer"
+                  title={activeInstrument.name}
+                  allowFullScreen
+                  allow="autoplay; fullscreen; xr-spatial-tracking"
+                  src={`https://sketchfab.com/models/${activeInstrument.sketchfabId}/embed?autostart=1&camera=0&preload=1&theme=dark&ui_infos=0&ui_watermark=0`}
+                ></iframe>
               </div>
 
               {/* Info dưới viewer */}
