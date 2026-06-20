@@ -1,0 +1,1094 @@
+import React, { useState, useEffect, useRef } from 'react';
+import {
+  Music, History, BookOpen, Users, ShieldAlert, Layers, Compass,
+  ChevronDown, Menu, X, Star, Sparkles, Award, Flame
+} from 'lucide-react';
+import bronzeDrum from './assets/—Pngtree—viet nam dongshan bronze drum_6690587.png';
+import craneBird from './assets/image.png';
+
+// ==========================================
+// 1. MOCK DATA - NỘI DUNG BẢO TÀNG
+// ==========================================
+const MUSEUM_DATA = {
+  hero: {
+    title: "Nghệ thuật Sân khấu Cải lương",
+    subtitle: "Từ Truyền Thống Đến Hiện Đại",
+    introQuestion: "Có bạn nào biết cách đây hơn 60 năm, thứ âm nhạc nào đã từng thống trị phần lớn thị trường giải trí, khiến người dân xếp hàng dài qua đêm và sẵn sàng bỏ ra số tiền tương đương cả một chỉ vàng chỉ để đổi lấy một cặp vé chợ đen vào rạp?",
+    introAnswer: "Vào thời kỳ hoàng kim của thập niên 1960, Cải lương chính là 'ông hoàng phòng vé', là văn hóa đại chúng đỉnh cao của người Việt Nam."
+  },
+  origins: {
+    title: "Mở Đầu & Nguồn Gốc Hình Thành",
+    part: "Phần 1",
+    definition: "Theo các tài liệu nghiên cứu của Viện Văn hóa Nghệ thuật quốc gia Việt Nam, 'Cải lương' có nghĩa là cải biến, cải cách để trở nên tốt đẹp hơn. Điều này được đúc kết rõ nhất qua cặp câu đối nổi tiếng tại rạp hát Tập Ích Ban xưa:",
+    couplet: {
+      line1: "Cải cách hát ca theo tiến bộ",
+      line2: "Lương truyền tuồng tích sánh văn minh"
+    },
+    source: "Về nguồn gốc, Cải lương là đứa con tinh thần của vùng đất Nam Bộ vào đầu thế kỷ XX. Nó không ra đời từ hư không, mà được tiến hóa trực tiếp từ nghệ thuật Đờn ca tài tử và hình thức Ca ra bộ (vừa ca vừa ướm bộ tịch). Sự xuất hiện của Cải lương phản ánh tư duy đổi mới, phóng khoáng của con người phương Nam thời bấy giờ.",
+    tags: ["Đờn ca tài tử", "Ca ra bộ", "Nam Bộ TK XX", "Cải biến"]
+  },
+  history: {
+    title: "Tiến Trình Lịch Sử Đầy Thăng Trầm",
+    part: "Phần 2",
+    timeline: [
+      {
+        period: "Giai đoạn định hình",
+        year: "1918 – 1930",
+        color: "#cda052",
+        desc: "Đây là thời kỳ các gánh hát đầu tiên ra đời, tiêu biểu là gánh Thầy Thận hay gánh Năm Tú ở Mỹ Tho. Những gánh hát này đặt nền móng cho nghệ thuật Cải lương hiện đại.",
+        icon: "🌱"
+      },
+      {
+        period: "Giai đoạn hoàng kim",
+        year: "Thập niên 1960 – 1970",
+        color: "#f3e1c3",
+        desc: "Đây là thời kỳ đỉnh cao của Cải lương. Sài Gòn lúc bấy giờ có hàng chục đại bang như Thanh Minh - Thanh Nga, Dạ Lý Hương... Các rạp hát luôn chật kín khán giả, sản sinh ra 'thế hệ vàng' như NSND Phùng Há, Út Trà Ôn, Thanh Nga...",
+        icon: "👑"
+      },
+      {
+        period: "Giai đoạn chuyển mình",
+        year: "Sau 1975 đến nay",
+        color: "#a39788",
+        desc: "Khi xã hội bước vào thời kỳ công nghệ số, Cải lương đối mặt với sự cạnh tranh lớn. Tuy nhiên, nó chưa bao giờ biến mất mà đang chọn cách chuyển mình, len lỏi vào các không gian mạng xã hội và các dự án sáng tạo của người trẻ để thích nghi với thời đại.",
+        icon: "🔄"
+      }
+    ]
+  },
+  features: {
+    title: "Đặc Trưng Nghệ Thuật & Nhạc Cụ",
+    part: "Phần 2 (tiếp theo)",
+    overview: "Cải lương là sự giao thoa độc đáo giữa nghệ thuật Đờn ca tài tử Nam Bộ, dân ca, tuồng cổ và ảnh hưởng của kịch nói phương Tây (đặc biệt là kịch Pháp).",
+    categories: [
+      {
+        name: "Âm nhạc và Bài ca",
+        subtitle: "Linh hồn của Cải lương",
+        icon: "🎵",
+        details: [
+          "Bản Dạ cổ hoài lang của nhạc sĩ Cao Văn Lầu là tiền thân của bản Vọng cổ — được xem là 'bài ca vua', là nhịp đập trái tim của mọi vở Cải lương.",
+          "Hệ thống bài bản phong phú sử dụng các bài bản của Đờn ca tài tử (Nam, Bắc, Oán, Ngự), các điệu Lý và dân ca Nam Bộ.",
+          "Sự linh hoạt (Tân cổ giao duyên): Từ giữa thế kỷ 20, các soạn giả đã đưa Tân nhạc vào xen kẽ với bài cổ."
+        ]
+      },
+      {
+        name: "Phong cách diễn xuất",
+        subtitle: "Tính chân thực và Bi cảm",
+        icon: "🎭",
+        details: [
+          "Chân thực, gần gũi: Chú trọng tính chân thực (ca ra bộ), gần với đời sống thực tế và kịch nói hơn Hát Bội mang tính ước lệ cao.",
+          "Nặng về 'Bi' và 'Tình': Đặc biệt xuất sắc trong việc khai thác chiều sâu tâm lý nhân vật, những thân phận éo le, tình yêu trắc trở, tình mẫu tử/phụ tử."
+        ]
+      },
+      {
+        name: "Kịch bản và Đề tài",
+        subtitle: "Tính đa dạng",
+        icon: "📜",
+        details: [
+          "Tuồng Xã hội: Phản ánh cuộc sống đương đại, mâu thuẫn gia đình, giai cấp (Nửa đời hương phấn, Tô Ánh Nguyệt, Đời cô Lựu).",
+          "Tuồng Dã sử / Lịch sử: Tôn vinh anh hùng dân tộc (Tiếng trống Mê Linh, Thái hậu Dương Vân Nga).",
+          "Tuồng Hương xa / Kiếm hiệp: Phóng tác từ tiểu thuyết ngoại quốc với trang phục lộng lẫy, cốt truyện ly kỳ (Máu nhuộm sân chùa)."
+        ]
+      },
+      {
+        name: "Sân khấu và Phục trang",
+        subtitle: "Tính tả thực và sắc màu",
+        icon: "🏛️",
+        details: [
+          "Sân khấu tả thực: Chịu ảnh hưởng của kịch phương Tây, sử dụng phông màn vẽ cảnh thật (nhà cửa, núi non, sông nước) và đạo cụ thật (bàn ghế, xe cộ).",
+          "Phục trang biến hóa: Tuồng xã hội mặc áo dài, âu phục; tuồng lịch sử mặc áo mão cung đình; tuồng hương xa mặc trang phục rực rỡ, đính kim sa lấp lánh."
+        ]
+      }
+    ]
+  },
+  instruments: [
+    {
+      id: "dan-kim",
+      name: "Đàn Kìm",
+      alias: "Đàn Nguyệt",
+      sketchfabId: "f16f0e023ee941c5a06b5dc9da720183",
+      emoji: "🎸",
+      desc: "Được mệnh danh là 'thầy đờn' (nhạc cụ chỉ huy) trong dàn nhạc. Tiếng đàn kìm tròn vành, rõ chữ, dẫn dắt nhịp độ cho cả dàn nhạc và ca sĩ.",
+      features: ["Nhạc cụ chỉ huy", "2 dây tơ lụa", "Hộp cộng hưởng hình trăng rằm"]
+    },
+    {
+      id: "dan-tranh",
+      name: "Đàn Tranh",
+      alias: "Guzheng Việt Nam",
+      sketchfabId: "8e21efd23ef84a32b8e7058cfb222941",
+      emoji: "🎼",
+      desc: "Với 16 dây, tiếng đàn tranh trong trẻo, réo rắt, như tiếng suối chảy, tạo nên sự mềm mại, mượt mà cho bài ca, thắm đượm hồn dân tộc.",
+      features: ["16 dây kim loại", "Âm thanh trong trẻo", "Kỹ thuật rung rẩy tinh tế"]
+    },
+    {
+      id: "dan-bau",
+      name: "Đàn Bầu",
+      alias: "Độc huyền cầm",
+      sketchfabId: "93607097be3a474cba22f9df374a52fb",
+      emoji: "🎶",
+      desc: "Với chỉ một dây nhưng âm vực rộng, tiếng đàn bầu sâu lắng, mang đậm hồn cốt dân tộc, độc đáo và không nơi nào trên thế giới có.",
+      features: ["1 dây duy nhất", "Âm vực 3 quãng tám", "Âm sắc vô cùng đặc biệt"]
+    }
+  ],
+  classics: {
+    title: "Tác Phẩm Kinh Điển & Chân Dung Nghệ Sĩ",
+    part: "Phần 3",
+    plays: {
+      social: [
+        { title: "Đời cô Lựu", author: "Soạn giả Trần Hữu Trang" },
+        { title: "Tô Ánh Nguyệt", author: "Soạn giả Trần Hữu Trang" },
+        { title: "Lan và Điệp", author: "Truyện ngắn lãng mạn" }
+      ],
+      ancient: [
+        { title: "Phụng Nghi Đình", author: "Tuồng cổ kinh điển" },
+        { title: "Mộc Quế Anh phụng vua", author: "Tích xưa" },
+        { title: "Bạch Viên Tôn Các", author: "Huyền thoại dân gian" }
+      ]
+    },
+    artists: [
+      {
+        name: "NSND Phùng Há & NSND Năm Châu",
+        title: "Người đặt nền móng",
+        role: "Những người đặt nền móng, xây dựng phong cách diễn xuất chuẩn mực cho nền Cải lương Việt Nam.",
+        badge: "Khai sáng"
+      },
+      {
+        name: "NSND Lệ Thủy & NSND Minh Vương",
+        title: "Cặp bài trùng huyền thoại",
+        role: "'Cặp bài trùng' huyền thoại với chất giọng ngọt ngào và làn hơi dài tinh tế, để lại dấu ấn không thể xóa mờ.",
+        badge: "Huyền thoại"
+      },
+      {
+        name: "NSND Bạch Tuyết",
+        title: "Cải lương chi bảo",
+        role: "Được mệnh danh là 'Cải lương chi bảo', luôn tìm tòi, đổi mới đưa tư duy hiện đại vào truyền thống.",
+        badge: "Chi Bảo"
+      },
+      {
+        name: "NSƯT Thanh Nga",
+        title: "Nữ hoàng sân khấu",
+        role: "Nữ hoàng sân khấu, biểu tượng của sự bi tráng và lãng mạn trong lòng người mộ điệu.",
+        badge: "Nữ Hoàng"
+      },
+      {
+        name: "Nghệ sĩ Vũ Linh",
+        title: "Ông hoàng hồ quảng",
+        role: "'Ông hoàng hồ quảng' với tài năng diễn xuất linh hoạt và vũ đạo điêu luyện trên sân khấu.",
+        badge: "Ông Hoàng"
+      }
+    ]
+  },
+  modern: {
+    title: "Cải Lương Trong Đời Sống Hiện Đại & Thách Thức",
+    part: "Phần 4",
+    challenges: [
+      {
+        title: "Sự cạnh tranh khốc liệt",
+        content: "Trong kỷ nguyên số, phải cạnh tranh với hàng loạt loại hình giải trí nhanh như phim ảnh, mạng xã hội, game online — những thứ tốn ít công sức hưởng thụ hơn.",
+        icon: "⚔️"
+      },
+      {
+        title: "Sự đứt gãy thế hệ",
+        content: "Số lượng bạn trẻ theo học còn khiêm tốn, thiếu hụt kịch bản mới chất lượng cao và thiếu nghệ sĩ kế thừa đủ tâm huyết.",
+        icon: "🔗"
+      },
+      {
+        title: "Gánh nặng tài chính",
+        content: "Duy trì một sân khấu chỉn chu với đầy đủ dàn nhạc, phục trang tốn kém rất nhiều kinh phí, trong khi doanh thu sụt giảm.",
+        icon: "💸"
+      }
+    ],
+    adaptation: [
+      {
+        title: "Ứng dụng công nghệ mới",
+        content: "Sử dụng màn hình LED, thiết kế ánh sáng và âm thanh chuẩn mực hiện đại, tạo trải nghiệm thị giác đỉnh cao cho khán giả.",
+        icon: "💡"
+      },
+      {
+        title: "Cách tân nội dung",
+        content: "Đưa các vấn đề xã hội đương đại, mang hơi thở thời đại vào kịch bản để gần gũi với giới trẻ hơn.",
+        icon: "✍️"
+      },
+      {
+        title: "Lan tỏa trên mạng xã hội",
+        content: "Tận dụng YouTube, TikTok để tạo nên sự hồi sinh qua các bản phối Remix, Lo-fi kết hợp Vọng cổ, thu hút hàng triệu lượt xem.",
+        icon: "📱"
+      }
+    ]
+  },
+  conservation: {
+    title: "Giải Pháp Bảo Tồn & Ứng Dụng Công Nghệ",
+    part: "Phần 5",
+    preservationSolutions: [
+      {
+        text: "Đẩy mạnh công tác sưu tầm, nghiên cứu, nhận diện, tư liệu hóa, kiểm kê Nghệ thuật Đờn ca tài tử và tổ chức tập huấn nâng cao nhận thức cộng đồng.",
+        category: "Nghiên cứu"
+      },
+      {
+        text: "Xuất bản sách, tạp chí, CD, VCD và DVD về Nghệ thuật Đờn ca tài tử cung cấp cho các phương tiện thông tin đại chúng để tuyên truyền, quảng bá rộng rãi trong và ngoài nước.",
+        category: "Truyền thông"
+      },
+      {
+        text: "Xây dựng chính sách đãi ngộ thỏa đáng cho nghệ nhân, người thực hành, truyền dạy và học viên theo học Đờn ca tài tử.",
+        category: "Chính sách"
+      },
+      {
+        text: "Thúc đẩy công tác truyền dạy tại cộng đồng. Xây dựng các chương trình giáo dục chính thức và ngoại khóa về Nghệ thuật Đờn ca tài tử.",
+        category: "Giáo dục"
+      },
+      {
+        text: "Khuyến khích và hỗ trợ cộng đồng duy trì, phục hồi tập quán xã hội, tín ngưỡng và các lễ hội liên quan đến Nghệ thuật Đờn ca tài tử Nam Bộ.",
+        category: "Cộng đồng"
+      },
+      {
+        text: "Xây dựng cơ sở dữ liệu về Nghệ thuật Đờn ca tài tử Nam Bộ tại Viện Âm nhạc theo hình thức mở để công chúng dễ dàng tiếp cận.",
+        category: "Dữ liệu"
+      }
+    ],
+    technologySolutions: [
+      {
+        text: "Tận dụng công nghệ mới để quảng bá và phân phối các vở cải lương, bao gồm phát trực tuyến (streaming) và sử dụng mạng xã hội để tăng tiếp cận.",
+        category: "Phát trực tuyến"
+      },
+      {
+        text: "Tăng cường quảng bá và marketing hiệu quả trên các nền tảng số để tạo ra sự chú ý và quan tâm của công chúng, đặc biệt là thế hệ trẻ.",
+        category: "Truyền thông số"
+      },
+      {
+        text: "Sử dụng công nghệ như một công cụ lưu trữ, ghi chép và truyền dạy di sản nghệ thuật truyền thống trong đời sinh hoạt hiện đại.",
+        category: "Lưu trữ số"
+      }
+    ]
+  },
+  conclusion: {
+    title: "Trải Nghiệm & Kết Luận",
+    part: "Phần 6",
+    text: "Cải lương hôm nay không còn là một nghệ thuật đóng băng trong bảo tàng. Nó đang tự làm mới mình bằng chính sức sống bền bỉ của người Việt. Chừng nào con người còn biết yêu, biết đau, biết trân trọng giá trị nhân văn, thì tiếng Vọng cổ vẫn sẽ còn vang vọng mãi."
+  }
+};
+
+// ==========================================
+// 2. HOOK REVEAL KHI CUỘN
+// ==========================================
+function useReveal() {
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+    const elements = document.querySelectorAll('.reveal');
+    elements.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+}
+
+// ==========================================
+// 3. COMPONENT CON: SECTION HEADER
+// ==========================================
+function SectionHeader({ part, title, center = true }) {
+  return (
+    <div className={`mb-16 ${center ? 'text-center' : ''}`}>
+      {part && (
+        <div className={`flex items-center gap-3 mb-3 ${center ? 'justify-center' : ''}`}>
+          <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#cda052] bg-[#cda052]/10 px-3 py-1 rounded-full border border-[#cda052]/30">
+            {part}
+          </span>
+        </div>
+      )}
+      <h2 className="font-serif text-3xl md:text-4xl font-bold text-[#f3e1c3] leading-tight">
+        {title}
+      </h2>
+      <div className={`flex items-center gap-4 mt-5 ${center ? 'justify-center' : ''}`}>
+        <div className="h-px w-12 bg-gradient-to-r from-transparent to-[#cda052]"></div>
+        <div className="w-1.5 h-1.5 rounded-full bg-[#cda052]"></div>
+        <div className="h-px w-12 bg-gradient-to-l from-transparent to-[#cda052]"></div>
+      </div>
+    </div>
+  );
+}
+
+// ==========================================
+// 4. COMPONENT CHÍNH: APP
+// ==========================================
+export default function App() {
+  const [activeInstrument, setActiveInstrument] = useState(MUSEUM_DATA.instruments[0]);
+  const [activeSection, setActiveSection] = useState("hero");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useReveal();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 60);
+
+      const sections = ["hero", "origins", "history", "features", "instruments", "classics", "modern", "conservation"];
+      const scrollPos = window.scrollY + 200;
+      for (const id of sections) {
+        const el = document.getElementById(id);
+        if (el && scrollPos >= el.offsetTop && scrollPos < el.offsetTop + el.offsetHeight) {
+          setActiveSection(id);
+          break;
+        }
+      }
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollTo = (id) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    setMobileMenuOpen(false);
+  };
+
+  const navItems = [
+    { id: "origins", label: "Nguồn Gốc", icon: Compass },
+    { id: "history", label: "Lịch Sử", icon: History },
+    { id: "features", label: "Đặc Trưng", icon: BookOpen },
+    { id: "instruments", label: "Cổ Vật 3D", icon: Music },
+    { id: "classics", label: "Tuyệt Tác", icon: Users },
+    { id: "modern", label: "Hiện Đại", icon: ShieldAlert },
+    { id: "conservation", label: "Bảo Tồn", icon: Layers },
+  ];
+
+  return (
+    <div className="min-h-screen bg-[#120c08] text-[#e6dfd5]">
+
+      {/* ============================
+          THANH ĐIỀU HƯỚNG (NAVBAR)
+          ============================ */}
+      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled
+        ? 'bg-[#0f0904]/97 backdrop-blur-xl border-b border-[#3a2a18] shadow-2xl shadow-black/50'
+        : 'bg-transparent'
+        }`}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="flex justify-between items-center h-16">
+            {/* Logo */}
+            <button
+              onClick={() => scrollTo('hero')}
+              className="flex items-center gap-2.5 group"
+            >
+              <div className="relative">
+                <Compass className="text-[#cda052] w-6 h-6 group-hover:rotate-45 transition-transform duration-500" />
+                <div className="absolute inset-0 bg-[#cda052] rounded-full blur-md opacity-0 group-hover:opacity-30 transition-opacity"></div>
+              </div>
+              <span className="font-serif tracking-widest text-base font-bold text-[#cda052]">
+                NHÓM 2 - CẢI LƯƠNG - ĐTR103
+              </span>
+            </button>
+
+            {/* Desktop nav */}
+            <div className="hidden lg:flex items-center gap-1">
+              {navItems.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => scrollTo(item.id)}
+                  className={`nav-link flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 ${activeSection === item.id
+                    ? 'text-[#cda052] bg-[#cda052]/10'
+                    : 'text-[#a39788] hover:text-[#cda052] hover:bg-[#cda052]/5'
+                    }`}
+                >
+                  <item.icon className="w-3.5 h-3.5" />
+                  {item.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Mobile menu button */}
+            <button
+              className="lg:hidden text-[#cda052] p-2"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile dropdown */}
+        <div className={`mobile-menu lg:hidden bg-[#0f0904]/98 border-b border-[#3a2a18] ${mobileMenuOpen ? 'open' : 'closed'}`}>
+          <div className="px-4 py-3 flex flex-col gap-1">
+            {navItems.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => scrollTo(item.id)}
+                className={`flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-left transition-colors ${activeSection === item.id
+                  ? 'text-[#cda052] bg-[#cda052]/10'
+                  : 'text-[#a39788] hover:text-[#cda052]'
+                  }`}
+              >
+                <item.icon className="w-4 h-4" />
+                {item.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </nav>
+
+      {/* ============================
+          HERO SECTION
+          ============================ */}
+      <section
+        id="hero"
+        className="relative min-h-screen flex flex-col justify-center items-center text-center px-4 overflow-hidden"
+        style={{
+          background: 'radial-gradient(ellipse at 50% 40%, #2d1e10 0%, #120c08 50%, #0a0604 100%)'
+        }}
+      >
+        {/* Dot grid nền */}
+        <div
+          className="absolute inset-0 dot-grid opacity-[0.06]"
+          style={{ backgroundSize: '28px 28px' }}
+        ></div>
+
+        {/* Glow circles trang trí */}
+        <div className="absolute top-1/3 left-1/4 w-96 h-96 bg-[#cda052] rounded-full blur-[160px] opacity-5 pointer-events-none"></div>
+        <div className="absolute bottom-1/3 right-1/4 w-64 h-64 bg-[#cda052] rounded-full blur-[120px] opacity-5 pointer-events-none"></div>
+
+        {/* Ornamental line trên */}
+        <div className="absolute top-24 left-1/2 -translate-x-1/2 w-px h-16 bg-gradient-to-b from-transparent to-[#3a2a18]"></div>
+
+        <div className="max-w-4xl z-10">
+          {/* Tiêu đề chính */}
+          <h1
+            className="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.1] mb-6 mt-12"
+            style={{
+              background: 'linear-gradient(135deg, #f3e1c3 0%, #cda052 40%, #e8c97a 70%, #f3e1c3 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text'
+            }}
+          >
+            {MUSEUM_DATA.hero.title}
+          </h1>
+
+          <p className="font-serif text-xl md:text-2xl text-[#a39788] italic mb-12">
+            {MUSEUM_DATA.hero.subtitle}
+          </p>
+
+          {/* Card câu hỏi mở đầu */}
+          <div className="relative w-full max-w-2xl mx-auto bg-[#1a120b]/90 border border-[#3a2a18] rounded-2xl p-6 md:p-8 shadow-2xl backdrop-blur-sm text-left mb-8 overflow-hidden">
+            {/* Background Trống Đồng xoay chậm nổi bật */}
+            <div className="absolute -right-12 -bottom-12 w-48 h-48 md:-right-20 md:-bottom-20 md:w-80 md:h-80 opacity-20 pointer-events-none z-0 animate-spin-slow">
+              <img
+                src={bronzeDrum}
+                alt="Trống đồng Đông Sơn"
+                className="w-full h-full object-contain filter-gold"
+              />
+            </div>
+
+            {/* Background Chim Hạc bay nhẹ đối xứng */}
+            <div className="absolute -left-6 -top-6 w-28 h-28 md:-left-10 md:-top-10 md:w-44 md:h-44 opacity-15 pointer-events-none z-0 animate-float-slow">
+              <img
+                src={craneBird}
+                alt="Chim hạc Đông Sơn"
+                className="w-full h-full object-contain filter-gold"
+              />
+            </div>
+
+            <div className="absolute -top-5 left-6 text-7xl leading-none text-[#3a2a18] font-serif select-none z-10">"</div>
+            <p className="text-[#cda052] italic mb-5 text-base md:text-lg relative z-10 leading-relaxed">
+              {MUSEUM_DATA.hero.introQuestion}
+            </p>
+            <div className="h-px bg-gradient-to-r from-[#3a2a18] via-[#cda052]/30 to-[#3a2a18] mb-5 relative z-10"></div>
+            <p className="text-[#e6dfd5]/80 font-light text-sm leading-relaxed relative z-10">
+              {MUSEUM_DATA.hero.introAnswer}
+            </p>
+          </div>
+
+          {/* Scroll indicator (được bọc trong container flex để căn giữa tuyệt đối) */}
+          <button
+            onClick={() => scrollTo('origins')}
+            className="flex flex-col items-center gap-1.5 opacity-50 hover:opacity-100 transition-opacity cursor-pointer animate-bounce group focus:outline-none z-20 mx-auto"
+          >
+            <span className="text-[10px] text-[#a39788] group-hover:text-[#cda052] tracking-widest uppercase transition-colors">
+              Cuộn xuống
+            </span>
+            <ChevronDown className="w-4 h-4 text-[#cda052]" />
+          </button>
+        </div>
+      </section>
+
+      {/* ============================
+          SECTION 1: NGUỒN GỐC
+          ============================ */}
+      <section id="origins" className="py-28 border-t border-[#23180e] relative overflow-hidden">
+        <div className="absolute right-0 top-0 w-1/3 h-full bg-gradient-to-l from-[#1a120b]/30 to-transparent pointer-events-none"></div>
+
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+            {/* Sticky sidebar */}
+            <div className="lg:col-span-4 lg:sticky lg:top-24 reveal">
+              <SectionHeader
+                part={MUSEUM_DATA.origins.part}
+                title={MUSEUM_DATA.origins.title}
+                center={false}
+              />
+
+              {/* Tags */}
+              <div className="flex flex-wrap gap-2 mt-4">
+                {MUSEUM_DATA.origins.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="text-xs bg-[#2d1f11] border border-[#3a2a18] text-[#cda052] px-3 py-1 rounded-full"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Nội dung */}
+            <div className="lg:col-span-8 space-y-8 reveal">
+              {/* Định nghĩa */}
+              <div className="bg-[#1a120b] border border-[#2d1f11] rounded-xl p-6 relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-[#cda052] to-transparent rounded-l-xl"></div>
+                <p className="text-[#cdbfad] font-light leading-relaxed text-justify pl-4">
+                  {MUSEUM_DATA.origins.definition}
+                </p>
+              </div>
+
+              {/* Câu đối */}
+              <div className="relative bg-[#17100a] border border-[#3a2a18] rounded-xl p-8 text-center">
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#17100a] px-4">
+                  <span className="text-xs text-[#cda052] tracking-widest uppercase">Câu đối nổi tiếng</span>
+                </div>
+                <p className="font-serif text-xl text-[#f3e1c3] italic mb-3">
+                  "{MUSEUM_DATA.origins.couplet.line1}
+                </p>
+                <div className="w-12 h-px bg-[#cda052]/40 mx-auto mb-3"></div>
+                <p className="font-serif text-xl text-[#f3e1c3] italic">
+                  {MUSEUM_DATA.origins.couplet.line2}"
+                </p>
+                <p className="text-xs text-[#5e4f3c] mt-4 tracking-wider">— Rạp hát Tập Ích Ban</p>
+              </div>
+
+              {/* Nguồn gốc */}
+              <p className="text-[#cdbfad] font-light leading-relaxed text-justify text-base">
+                {MUSEUM_DATA.origins.source}
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================
+          SECTION 2: TIẾN TRÌNH LỊCH SỬ (TIMELINE)
+          ============================ */}
+      <section id="history" className="py-28 bg-[#17100a] border-t border-b border-[#23180e]">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="reveal">
+            <SectionHeader
+              part={MUSEUM_DATA.history.part}
+              title={MUSEUM_DATA.history.title}
+            />
+          </div>
+
+          <div className="relative mt-8">
+            {/* Đường dọc timeline */}
+            <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-[#3a2a18] to-transparent transform md:-translate-x-1/2"></div>
+
+            <div className="space-y-16">
+              {MUSEUM_DATA.history.timeline.map((item, idx) => (
+                <div
+                  key={idx}
+                  className={`reveal relative flex flex-col md:flex-row gap-8 md:gap-0 ${idx % 2 === 1 ? 'md:flex-row-reverse' : ''}`}
+                >
+                  {/* Card nội dung */}
+                  <div className={`w-full md:w-1/2 pl-12 md:pl-0 ${idx % 2 === 0 ? 'md:pr-12 md:pl-0' : 'md:pl-12'}`}>
+                    <div className="card-glow bg-[#1a120b] border border-[#2d1f11] rounded-xl p-6 relative group cursor-default">
+                      <div className="flex items-start gap-4 mb-4">
+                        <span className="text-3xl flex-shrink-0">{item.icon}</span>
+                        <div>
+                          <span
+                            className="text-xs font-bold uppercase tracking-widest px-2 py-0.5 rounded-full mb-1 inline-block"
+                            style={{ color: item.color, backgroundColor: `${item.color}15`, border: `1px solid ${item.color}30` }}
+                          >
+                            {item.year}
+                          </span>
+                          <h3 className="font-serif text-xl font-bold text-[#f3e1c3] mt-1">{item.period}</h3>
+                        </div>
+                      </div>
+                      <p className="text-[#cdbfad] font-light leading-relaxed text-sm text-justify">{item.desc}</p>
+                    </div>
+                  </div>
+
+                  {/* Dot giữa */}
+                  <div className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+                    <div
+                      className="w-5 h-5 rounded-full border-2 flex items-center justify-center"
+                      style={{ borderColor: item.color, backgroundColor: '#120c08' }}
+                    >
+                      <div className="w-2 h-2 rounded-full" style={{ backgroundColor: item.color }}></div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================
+          SECTION 3: ĐẶC TRƯNG NGHỆ THUẬT
+          ============================ */}
+      <section id="features" className="py-28 border-t border-[#23180e]">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="reveal">
+            <SectionHeader
+              title={MUSEUM_DATA.features.title}
+            />
+            <p className="text-center text-[#a39788] italic max-w-2xl mx-auto -mt-8 mb-12">
+              {MUSEUM_DATA.features.overview}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {MUSEUM_DATA.features.categories.map((cat, idx) => (
+              <div
+                key={idx}
+                className="reveal card-glow bg-[#1a120b] border border-[#2d1f11] rounded-xl overflow-hidden group cursor-default"
+              >
+                {/* Header card */}
+                <div className="p-5 bg-gradient-to-r from-[#2d1f11]/80 to-transparent border-b border-[#2d1f11] min-h-[140px]">
+                  <div className="text-3xl mb-3">{cat.icon}</div>
+                  <h3 className="font-serif text-lg font-bold text-[#f3e1c3]">{cat.name}</h3>
+                  <p className="text-xs text-[#cda052] mt-1 uppercase tracking-wider">{cat.subtitle}</p>
+                </div>
+
+                {/* Body card */}
+                <div className="p-5">
+                  <ul className="space-y-4">
+                    {cat.details.map((detail, dIdx) => (
+                      <li key={dIdx} className="flex gap-3 text-sm text-[#cdbfad] font-light leading-relaxed">
+                        <span className="text-[#cda052] mt-0.5 flex-shrink-0">◆</span>
+                        <span className="text-justify">{detail}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ============================
+          SECTION 4: PHÒNG CỔ VẬT 3D (SKETCHFAB) & DÀN NHẠC
+          ============================ */}
+      <section id="instruments" className="py-28 bg-[#0f0a06] border-t border-b border-[#23180e] relative overflow-hidden">
+        {/* Background decorative */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_#1a0e05_0%,_transparent_70%)] pointer-events-none"></div>
+
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
+          <div className="reveal text-center mb-14">
+            <div className="inline-flex items-center gap-2 text-[#cda052] tracking-widest uppercase text-xs mb-4">
+              <div className="w-8 h-px bg-[#cda052]"></div>
+              Không Gian Tương Tác Kỹ Thuật Số
+              <div className="w-8 h-px bg-[#cda052]"></div>
+            </div>
+            <h2 className="font-serif text-3xl md:text-4xl font-bold text-[#f3e1c3] mb-3">
+              Hệ Thống Nhạc Cụ
+            </h2>
+            <p className="text-sm text-[#a39788] max-w-md mx-auto">
+              Chọn nhạc cụ để khám phá mô hình 3D tương tác — xoay, thu phóng và quan sát từ mọi góc độ
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+            {/* Sidebar chọn nhạc cụ */}
+            <div className="lg:col-span-4 flex flex-col sm:flex-row lg:flex-col gap-3">
+              {MUSEUM_DATA.instruments.map((inst) => {
+                const isActive = activeInstrument.id === inst.id;
+                return (
+                  <button
+                    key={inst.id}
+                    onClick={() => setActiveInstrument(inst)}
+                    className={`flex-1 lg:flex-none p-4 text-left rounded-xl border transition-all duration-300 relative overflow-hidden group ${isActive
+                      ? 'bg-[#1a120b] border-[#cda052] shadow-lg shadow-[#cda052]/10 animate-pulse-gold'
+                      : 'bg-[#120c08]/50 border-[#2d1f11] hover:border-[#4d361e] hover:bg-[#1a120b]/50'
+                      }`}
+                  >
+                    {isActive && (
+                      <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-[#cda052] to-[#8a6530] rounded-l-xl"></div>
+                    )}
+                    <div className="flex items-center gap-3 pl-2">
+                      <span className="text-2xl">{inst.emoji}</span>
+                      <div>
+                        <span className={`font-serif text-base font-bold block ${isActive ? 'text-[#cda052]' : 'text-[#a39788]'}`}>
+                          {inst.name}
+                        </span>
+                        <span className="text-[10px] text-[#5e4f3c] uppercase tracking-wider">{inst.alias}</span>
+                      </div>
+                    </div>
+                    {/* Features chỉ hiện khi active */}
+                    {isActive && (
+                      <div className="mt-3 pl-2 flex flex-wrap gap-1">
+                        {inst.features.map((f) => (
+                          <span key={f} className="text-[10px] bg-[#cda052]/10 text-[#cda052] border border-[#cda052]/20 px-2 py-0.5 rounded-full">
+                            {f}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Màn hình 3D */}
+            <div className="lg:col-span-8 flex flex-col bg-[#0d0906] border border-[#2d1f11] rounded-2xl overflow-hidden shadow-2xl">
+              {/* Header viewer */}
+              <div className="flex items-center justify-between px-5 py-3 border-b border-[#2d1f11] bg-[#120c08]">
+                <div className="flex items-center gap-2">
+                  <div className="w-2.5 h-2.5 rounded-full bg-[#e55353]"></div>
+                  <div className="w-2.5 h-2.5 rounded-full bg-[#cda052]"></div>
+                  <div className="w-2.5 h-2.5 rounded-full bg-[#4d9e4d]"></div>
+                </div>
+                <span className="text-xs text-[#5e4f3c] uppercase tracking-widest">
+                  {activeInstrument.name} · Mô hình 3D tương tác
+                </span>
+                <Music className="w-4 h-4 text-[#5e4f3c]" />
+              </div>
+
+              {/* iFrame Sketchfab */}
+              <div className="sketchfab-container flex-1" style={{ paddingTop: '60%' }}>
+                {MUSEUM_DATA.instruments.map((inst) => (
+                  <iframe
+                    key={inst.id}
+                    title={inst.name}
+                    allowFullScreen
+                    allow="autoplay; fullscreen; xr-spatial-tracking"
+                    src={`https://sketchfab.com/models/${inst.sketchfabId}/embed?autostart=1&camera=0&preload=1&theme=dark&ui_infos=0&ui_watermark=0`}
+                    style={{
+                      display: activeInstrument.id === inst.id ? 'block' : 'none',
+                    }}
+                  ></iframe>
+                ))}
+              </div>
+
+              {/* Info dưới viewer */}
+              <div className="p-5 border-t border-[#2d1f11] bg-[#120c08]">
+                <div className="flex items-start gap-3">
+                  <span className="text-2xl">{activeInstrument.emoji}</span>
+                  <div>
+                    <h4 className="font-serif text-[#cda052] font-bold text-sm uppercase tracking-wider mb-1">
+                      {activeInstrument.name}
+                      <span className="text-[#5e4f3c] font-normal ml-2 normal-case tracking-normal">— {activeInstrument.alias}</span>
+                    </h4>
+                    <p className="text-xs text-[#cdbfad] font-light leading-relaxed">{activeInstrument.desc}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Dàn nhạc cổ và tân bổ sung */}
+          <div className="mt-16 reveal grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Dàn Nhạc Cổ */}
+            <div className="bg-[#1a120b] border border-[#2d1f11] rounded-2xl p-6 md:p-8">
+              <h3 className="font-serif text-lg font-bold text-[#cda052] mb-6 flex items-center gap-3 pb-3 border-b border-[#2d1f11]">
+                <Music className="w-5 h-5" />
+                Dàn Nhạc Cổ (Truyền Thống)
+              </h3>
+              <p className="text-xs text-[#a39788] mb-6 italic">
+                Bộ khung tạo nên chất âm đặc trưng và mộc mạc của vùng đất Nam Bộ
+              </p>
+              <div className="space-y-4">
+                <div className="flex gap-3 text-sm text-[#cdbfad] font-light">
+                  <span className="text-[#cda052] font-bold flex-shrink-0">◆ Đàn Cò (Đàn Nhị):</span>
+                  <span className="text-justify">Tiếng đàn nỉ non, ai oán, là vũ khí sắc bén nhất để đẩy cảm xúc người nghe lên cao trào trong các phân đoạn bi thương, đẫm nước mắt.</span>
+                </div>
+                <div className="flex gap-3 text-sm text-[#cdbfad] font-light">
+                  <span className="text-[#cda052] font-bold flex-shrink-0">◆ Đàn Sến:</span>
+                  <span className="text-justify">Nhạc cụ mang lại âm sắc vô cùng mộc mạc, tiếng đàn nảy hạt đặc trưng cho các bài bản cổ.</span>
+                </div>
+                <div className="flex gap-3 text-sm text-[#cdbfad] font-light">
+                  <span className="text-[#cda052] font-bold flex-shrink-0">◆ Sáo Trúc / Tiêu:</span>
+                  <span className="text-justify">Tạo ra không gian mênh mang, u buồn hoặc thanh bình sâu lắng cho bối cảnh vở diễn.</span>
+                </div>
+                <div className="flex gap-3 text-sm text-[#cdbfad] font-light">
+                  <span className="text-[#cda052] font-bold flex-shrink-0">◆ Song Loan:</span>
+                  <span className="text-justify">Mõ nhỏ bằng gỗ tròn dẹt. Nhạc công dùng chân hoặc tay gõ để giữ nhịp chính cho cả dàn nhạc và người hát, không bao giờ được phép sai lệch.</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Dàn Nhạc Tân */}
+            <div className="bg-[#1a120b] border border-[#2d1f11] rounded-2xl p-6 md:p-8">
+              <h3 className="font-serif text-lg font-bold text-[#cda052] mb-6 flex items-center gap-3 pb-3 border-b border-[#2d1f11]">
+                <Sparkles className="w-5 h-5" />
+                Dàn Nhạc Tân (Sự Cách Tân Độc Đáo)
+              </h3>
+              <p className="text-xs text-[#a39788] mb-6 italic">
+                Sự kết hợp độc đáo khi Việt hóa nhạc cụ phương Tây phục vụ cổ nhạc
+              </p>
+              <div className="space-y-4">
+                <div className="flex gap-3 text-sm text-[#cdbfad] font-light">
+                  <span className="text-[#cda052] font-bold flex-shrink-0">◆ Đàn Ghi-ta phím lõm:</span>
+                  <span className="text-justify">Phát minh vĩ đại nhất của âm nhạc tài tử - cải lương. Phím đàn được khoét lõm sâu để ngón tay nhấn, rung, vuốt dây tạo ra các âm luyến láy nỉ non đặc thù của vọng cổ.</span>
+                </div>
+                <div className="flex gap-3 text-sm text-[#cdbfad] font-light">
+                  <span className="text-[#cda052] font-bold flex-shrink-0">◆ Nhạc cụ phương Tây khác:</span>
+                  <span className="text-justify">Violon, Saxophone, Piano, Organ và Trống Jazz được sử dụng thường xuyên trong các vở tuồng xã hội, hương xa để tăng sự hoành tráng và phong phú về âm sắc.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================
+          SECTION 5: TÁC PHẨM & NGHỆ SĨ
+          ============================ */}
+      <section id="classics" className="py-28 border-t border-[#23180e]">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="reveal">
+            <SectionHeader
+              part={MUSEUM_DATA.classics.part}
+              title={MUSEUM_DATA.classics.title}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+            {/* Danh sách tác phẩm */}
+            <div className="lg:col-span-4 reveal">
+              <div className="space-y-8">
+                {/* Xã hội */}
+                <div className="bg-[#1a120b] border border-[#2d1f11] rounded-xl p-5">
+                  <h4 className="text-xs uppercase font-bold tracking-widest text-[#cda052] mb-4 flex items-center gap-2">
+                    <Flame className="w-3.5 h-3.5" />
+                    Dòng Cải Lương Xã Hội
+                  </h4>
+                  <div className="space-y-3">
+                    {MUSEUM_DATA.classics.plays.social.map((play, idx) => (
+                      <div key={idx} className="border-l-2 border-[#cda052]/30 pl-3">
+                        <p className="font-serif text-sm text-[#f3e1c3] font-medium">{play.title}</p>
+                        <p className="text-xs text-[#5e4f3c] mt-0.5">{play.author}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Tuồng cổ */}
+                <div className="bg-[#1a120b] border border-[#2d1f11] rounded-xl p-5">
+                  <h4 className="text-xs uppercase font-bold tracking-widest text-[#a39788] mb-4 flex items-center gap-2">
+                    <Star className="w-3.5 h-3.5" />
+                    Dòng Cải Lương Tuồng Cổ
+                  </h4>
+                  <div className="space-y-3">
+                    {MUSEUM_DATA.classics.plays.ancient.map((play, idx) => (
+                      <div key={idx} className="border-l-2 border-[#a39788]/30 pl-3">
+                        <p className="font-serif text-sm text-[#f3e1c3] font-medium">{play.title}</p>
+                        <p className="text-xs text-[#5e4f3c] mt-0.5">{play.author}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Nghệ sĩ */}
+            <div className="lg:col-span-8 reveal">
+              <h3 className="font-serif text-2xl font-bold text-[#cda052] mb-6 flex items-center gap-3">
+                <Users className="w-6 h-6" />
+                Những Tượng Đài Giữ Lửa
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {MUSEUM_DATA.classics.artists.map((art, idx) => (
+                  <div
+                    key={idx}
+                    className="card-glow bg-[#1a120b] border border-[#2d1f11] rounded-xl p-5 group cursor-default relative overflow-hidden"
+                  >
+                    <div className="absolute top-0 right-0 opacity-10 text-7xl leading-none pointer-events-none select-none font-serif text-[#cda052]">
+                      {idx + 1}
+                    </div>
+                    <div className="flex items-start justify-between mb-3">
+                      <Award className="w-4 h-4 text-[#cda052] flex-shrink-0 mt-0.5" />
+                      <span className="text-[10px] bg-[#cda052]/10 text-[#cda052] border border-[#cda052]/20 px-2 py-0.5 rounded-full uppercase tracking-wider">
+                        {art.badge}
+                      </span>
+                    </div>
+                    <h4 className="font-serif text-[#f3e1c3] font-bold text-sm mb-1">{art.name}</h4>
+                    <p className="text-xs text-[#cda052] mb-2 italic">{art.title}</p>
+                    <p className="text-xs text-[#a39788] font-light leading-relaxed">{art.role}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================
+          SECTION 6: THÁCH THỨC & CHUYỂN MÌNH
+          ============================ */}
+      <section id="modern" className="py-28 bg-[#17100a] border-t border-[#23180e]">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="reveal">
+            <SectionHeader
+              part={MUSEUM_DATA.modern.part}
+              title={MUSEUM_DATA.modern.title}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mt-4">
+            {/* Thách thức */}
+            <div className="reveal space-y-5">
+              <h3 className="font-serif text-xl font-bold text-[#e55353] flex items-center gap-2 pb-3 border-b border-[#3a2a18]">
+                <ShieldAlert className="w-5 h-5" />
+                Thách Thức & Rào Cản
+              </h3>
+              {MUSEUM_DATA.modern.challenges.map((item, idx) => (
+                <div
+                  key={idx}
+                  className="bg-[#1f150d] rounded-xl p-5 border border-[#2d1f11] border-l-4 border-l-[#e55353] group hover:bg-[#241810] transition-colors"
+                >
+                  <div className="flex items-center gap-3 mb-2">
+                    <span className="text-xl">{item.icon}</span>
+                    <h4 className="font-serif text-[#f3e1c3] font-bold text-sm">{item.title}</h4>
+                  </div>
+                  <p className="text-xs text-[#cdbfad] font-light leading-relaxed text-justify pl-9">{item.content}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Chuyển mình */}
+            <div className="reveal space-y-5">
+              <h3 className="font-serif text-xl font-bold text-[#cda052] flex items-center gap-2 pb-3 border-b border-[#3a2a18]">
+                <Layers className="w-5 h-5" />
+                Sự Chuyển Mình Thời Đại Mới
+              </h3>
+              {MUSEUM_DATA.modern.adaptation.map((item, idx) => (
+                <div
+                  key={idx}
+                  className="bg-[#1f150d] rounded-xl p-5 border border-[#2d1f11] border-l-4 border-l-[#cda052] group hover:bg-[#241810] transition-colors"
+                >
+                  <div className="flex items-center gap-3 mb-2">
+                    <span className="text-xl">{item.icon}</span>
+                    <h4 className="font-serif text-[#f3e1c3] font-bold text-sm">{item.title}</h4>
+                  </div>
+                  <p className="text-xs text-[#cdbfad] font-light leading-relaxed text-justify pl-9">{item.content}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================
+          SECTION 7: GIẢI PHÁP BẢO TỒN
+          ============================ */}
+      <section id="conservation" className="py-28 border-t border-[#23180e]">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="reveal">
+            <SectionHeader
+              part={MUSEUM_DATA.conservation.part}
+              title={MUSEUM_DATA.conservation.title}
+            />
+          </div>
+
+          <div className="reveal bg-[#1a120b] border border-[#3a2a18] rounded-2xl p-6 md:p-8 relative overflow-hidden">
+            {/* Trang trí góc */}
+            <div className="absolute top-0 right-0 w-48 h-48 bg-[#cda052] rounded-full blur-[100px] opacity-[0.04] pointer-events-none"></div>
+            <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#cda052] rounded-full blur-[80px] opacity-[0.04] pointer-events-none"></div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 relative z-10">
+              {/* Giải pháp bảo tồn truyền thống */}
+              <div className="lg:col-span-7 space-y-4">
+                <h3 className="font-serif text-lg font-bold text-[#cda052] mb-4 flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#cda052]"></span>
+                  Giải Pháp Bảo Tồn Di Sản
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {MUSEUM_DATA.conservation.preservationSolutions.map((sol, idx) => (
+                    <div
+                      key={idx}
+                      className="flex gap-3 items-start bg-[#17100a] border border-[#2d1f11] rounded-xl p-4 hover:border-[#3a2a18] transition-colors"
+                    >
+                      <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#cda052]/15 border border-[#cda052]/30 flex items-center justify-center">
+                        <span className="text-[#cda052] text-[10px] font-bold">{idx + 1}</span>
+                      </div>
+                      <div>
+                        <span className="text-[9px] uppercase tracking-widest text-[#cda052] font-bold mb-1 block">{sol.category}</span>
+                        <p className="text-xs text-[#cdbfad] font-light leading-relaxed">{sol.text}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Giải pháp ứng dụng công nghệ */}
+              <div className="lg:col-span-5 space-y-4">
+                <h3 className="font-serif text-lg font-bold text-[#cda052] mb-4 flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#cda052]"></span>
+                  Ứng Dụng Công Nghệ Hiện Đại
+                </h3>
+                <div className="space-y-4">
+                  {MUSEUM_DATA.conservation.technologySolutions.map((sol, idx) => (
+                    <div
+                      key={idx}
+                      className="flex gap-3 items-start bg-[#17100a] border border-[#2d1f11] rounded-xl p-4 hover:border-[#cda052]/50 transition-colors border-l-2 border-l-[#cda052]"
+                    >
+                      <div>
+                        <span className="text-[9px] uppercase tracking-widest text-[#cda052] font-bold mb-1 block">{sol.category}</span>
+                        <p className="text-xs text-[#cdbfad] font-light leading-relaxed">{sol.text}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================
+          FOOTER / LỜI KẾT
+          ============================ */}
+      <footer className="bg-[#0b0704] border-t border-[#23180e] py-20 text-center px-4 relative overflow-hidden">
+        <div className="absolute inset-0 dot-grid opacity-[0.03]" style={{ backgroundSize: '20px 20px' }}></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-48 bg-[#cda052] rounded-full blur-[150px] opacity-[0.04] pointer-events-none"></div>
+
+        <div className="max-w-2xl mx-auto relative z-10">
+          {/* Part badge */}
+          <div className="inline-flex items-center gap-2 text-[#cda052] tracking-widest uppercase text-xs mb-8 opacity-60">
+            {MUSEUM_DATA.conclusion.part}
+          </div>
+
+          {/* Dòng kẻ trang trí */}
+          <div className="ornament mb-8">
+            <span className="text-[#cda052] text-lg">✦</span>
+          </div>
+
+          {/* Lời kết */}
+          <blockquote className="font-serif text-xl md:text-2xl text-[#f3e1c3] italic leading-relaxed mb-8">
+            "{MUSEUM_DATA.conclusion.text}"
+          </blockquote>
+
+          {/* Divider */}
+          <div className="ornament my-8">
+            <span className="text-[#3a2a18] text-lg">✦</span>
+          </div>
+
+          {/* Logo cuối trang */}
+          <div className="flex justify-center items-center gap-2 mb-4">
+            <Compass className="text-[#cda052] w-5 h-5 opacity-60" />
+            <span className="font-serif text-[#cda052] text-sm tracking-widest opacity-60">NHÓM 2 - CẢI LƯƠNG - DTR103</span>
+          </div>
+
+          <p className="text-xs text-[#3a2a18] tracking-[0.3em] uppercase">
+            © 2026 · Bảo Tàng Số Cải Lương Việt Nam
+          </p>
+          <p className="text-[10px] text-[#2d1f11] mt-2 tracking-widest">
+            Nghệ thuật sân khấu truyền thống · Di sản Văn hóa Phi vật thể
+          </p>
+        </div>
+      </footer>
+
+    </div>
+  );
+}
