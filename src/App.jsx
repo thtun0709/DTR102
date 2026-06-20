@@ -4,7 +4,6 @@ import {
   ChevronDown, Menu, X, Star, Sparkles, Award, Flame
 } from 'lucide-react';
 import bronzeDrum from './assets/—Pngtree—viet nam dongshan bronze drum_6690587.png';
-import craneBird from './assets/image.png';
 
 // ==========================================
 // 1. MOCK DATA - NỘI DUNG BẢO TÀNG
@@ -480,14 +479,7 @@ export default function App() {
               />
             </div>
 
-            {/* Background Chim Hạc bay nhẹ đối xứng */}
-            <div className="absolute -left-6 -top-6 w-28 h-28 md:-left-10 md:-top-10 md:w-44 md:h-44 opacity-15 pointer-events-none z-0 animate-float-slow">
-              <img
-                src={craneBird}
-                alt="Chim hạc Đông Sơn"
-                className="w-full h-full object-contain filter-gold"
-              />
-            </div>
+
 
             <div className="absolute -top-5 left-6 text-7xl leading-none text-[#3a2a18] font-serif select-none z-10">"</div>
             <p className="text-[#cda052] italic mb-5 text-base md:text-lg relative z-10 leading-relaxed">
