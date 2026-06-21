@@ -249,3 +249,31 @@ body::before {
 .filter-gold {
   filter: invert(72%) sepia(33%) saturate(1000%) hue-rotate(345deg) brightness(95%) contrast(90%);
 }
+
+/* ============================
+   ARTIST MODAL ANIMATIONS
+   ============================ */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Scrollbar bên trong modal */
+.modal-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+.modal-scroll::-webkit-scrollbar-thumb {
+  background: var(--border-warm);
+  border-radius: 2px;
+}

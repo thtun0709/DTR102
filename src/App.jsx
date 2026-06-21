@@ -4,6 +4,12 @@ import {
   ChevronDown, Menu, X, Star, Sparkles, Award, Flame
 } from 'lucide-react';
 import bronzeDrum from './assets/—Pngtree—viet nam dongshan bronze drum_6690587.png';
+import imgPhungHa from './assets/phung-ha.png';
+import imgNamChau from './assets/nam-chau.png';
+import imgLeThuyMinhVuong from './assets/le-thuy-minh-vuong.png';
+import imgBachTuyet from './assets/bach-tuyet.png';
+import imgVuLinh from './assets/vu-linh.png';
+import imgThanhNga from './assets/thanh-nga.png';
 
 // ==========================================
 // 1. MOCK DATA - NỘI DUNG BẢO TÀNG
@@ -147,31 +153,51 @@ const MUSEUM_DATA = {
         name: "NSND Phùng Há & NSND Năm Châu",
         title: "Người đặt nền móng",
         role: "Những người đặt nền móng, xây dựng phong cách diễn xuất chuẩn mực cho nền Cải lương Việt Nam.",
-        badge: "Khai sáng"
+        badge: "Khai sáng",
+        image: [imgPhungHa, imgNamChau],
+        bio: "NSND Phùng Há (1911–2009) là huyền thoại sống của sân khấu Cải lương với hơn 70 năm cống hiến. Bà được UNESCO vinh danh là Nghệ nhân dân gian xuất sắc. NSND Năm Châu (1906–1978) là soạn giả, đạo diễn và diễn viên lỗi lạc, người đầu tiên đưa kịch nói phương Tây vào Cải lương, tạo nên phong cách diễn xuất chân thực, tâm lý sâu sắc.",
+        notable: ["Tô Ánh Nguyệt", "Đời cô Lựu", "Thần nữ dâng hoa", "Phụng Nghi Đình"],
+        awards: ["Nghệ sĩ Nhân dân", "UNESCO Nghệ nhân dân gian", "Huân chương Độc lập"]
       },
       {
         name: "NSND Lệ Thủy & NSND Minh Vương",
         title: "Cặp bài trùng huyền thoại",
         role: "'Cặp bài trùng' huyền thoại với chất giọng ngọt ngào và làn hơi dài tinh tế, để lại dấu ấn không thể xóa mờ.",
-        badge: "Huyền thoại"
+        badge: "Huyền thoại",
+        image: [imgLeThuyMinhVuong],
+        bio: "NSND Lệ Thủy và NSND Minh Vương là cặp song ca huyền thoại được mệnh danh là 'Đôi chim quý' của sân khấu Cải lương. Lệ Thủy sở hữu giọng ca trong trẻo, ngọt ngào đặc biệt ở âm vực cao. Minh Vương với làn hơi dài, chắc khỏe và lối diễn xuất đầy cảm xúc. Cả hai đã cùng nhau tạo nên hàng chục vở diễn bất hủ trong lòng khán giả nhiều thế hệ.",
+        notable: ["Lan và Điệp", "Tô Ánh Nguyệt", "Tình mẫu tử", "Đời cô Lựu"],
+        awards: ["Nghệ sĩ Nhân dân", "Giải Thanh Tâm", "Huy chương vàng Hội diễn"]
       },
       {
         name: "NSND Bạch Tuyết",
         title: "Cải lương chi bảo",
         role: "Được mệnh danh là 'Cải lương chi bảo', luôn tìm tòi, đổi mới đưa tư duy hiện đại vào truyền thống.",
-        badge: "Chi Bảo"
-      },
-      {
-        name: "NSƯT Thanh Nga",
-        title: "Nữ hoàng sân khấu",
-        role: "Nữ hoàng sân khấu, biểu tượng của sự bi tráng và lãng mạn trong lòng người mộ điệu.",
-        badge: "Nữ Hoàng"
+        badge: "Chi Bảo",
+        image: [imgBachTuyet],
+        bio: "NSND Bạch Tuyết (sinh 1945) là nghệ sĩ Cải lương lỗi lạc, người đầu tiên đưa nghệ thuật Cải lương lên sân khấu quốc tế. Bà không chỉ là một nghệ sĩ biểu diễn tài năng mà còn là nhà nghiên cứu nghiêm túc về nghệ thuật truyền thống. Bà nhận học vị Tiến sĩ Nghệ thuật học tại Hungary và đã dàn dựng, lồng ghép Cải lương với kịch Shakespeare, tạo nên cách tiếp cận mới mẻ độc đáo.",
+        notable: ["Thái hậu Dương Vân Nga", "Tiếng trống Mê Linh", "Hamlet - Cải lương", "Kim Vân Kiều"],
+        awards: ["Nghệ sĩ Nhân dân", "Tiến sĩ Nghệ thuật học", "Giải thưởng Nhà nước"]
       },
       {
         name: "Nghệ sĩ Vũ Linh",
         title: "Ông hoàng hồ quảng",
         role: "'Ông hoàng hồ quảng' với tài năng diễn xuất linh hoạt và vũ đạo điêu luyện trên sân khấu.",
-        badge: "Ông Hoàng"
+        badge: "Ông Hoàng",
+        image: [imgVuLinh],
+        bio: "Nghệ sĩ Vũ Linh (1952–2023) được khán giả phong danh hiệu 'Ông hoàng hồ quảng' vì tài năng xuất chúng trong các vở tuồng cổ, đặc biệt thể loại hồ quảng mang phong vị Trung Hoa. Ông nổi tiếng với vũ đạo điêu luyện, nội lực diễn xuất mạnh mẽ và khả năng hóa thân đa dạng từ vai anh hùng hào kiệt đến kẻ phản diện gian xảo.",
+        notable: ["Máu nhuộm sân chùa", "Bao Công tra án Bàng Quý Phi", "San Hậu", "Mộc Quế Anh dâng cây"],
+        awards: ["Nghệ sĩ Ưu tú", "Huy chương vàng Hội diễn", "Cúp nghệ sĩ được yêu thích"]
+      },
+      {
+        name: "NSƯT Thanh Nga",
+        title: "Nữ hoàng sân khấu",
+        role: "Nữ hoàng sân khấu, biểu tượng của sự bi tráng và lãng mạn trong lòng người mộ điệu.",
+        badge: "Nữ Hoàng",
+        image: [imgThanhNga],
+        bio: "NSƯT Thanh Nga (1942–1978) là ngôi sao sáng chói nhất của sân khấu Cải lương miền Nam thập niên 1960–70. Bà được mệnh danh là 'Nữ hoàng sân khấu' với nhan sắc kiều diễm, giọng ca thiết tha và lối diễn xuất đầy cảm xúc, đặc biệt xuất sắc trong vai diễn bi kịch. Cuộc đời bà kết thúc đột ngột và bi thảm vào năm 1978, để lại niềm tiếc thương vô hạn trong lòng người hâm mộ.",
+        notable: ["Tiếng trống Mê Linh", "Thái hậu Dương Vân Nga", "Sân khấu về khuya", "Bóng tối và ánh sáng"],
+        awards: ["Nghệ sĩ Ưu tú", "Giải Thanh Tâm", "Biểu tượng văn hóa Sài Gòn"]
       }
     ]
   },
@@ -311,13 +337,147 @@ function SectionHeader({ part, title, center = true }) {
 }
 
 // ==========================================
-// 4. COMPONENT CHÍNH: APP
+// 4. COMPONENT: ARTIST MODAL
+// ==========================================
+function ArtistModal({ artist, onClose }) {
+  // Chỉ khóa scroll & lắng nghe Escape khi modal đang mở
+  useEffect(() => {
+    if (!artist) return; // guard: không làm gì khi modal đóng
+    const handleKey = (e) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', handleKey);
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', handleKey);
+      document.body.style.overflow = '';
+    };
+  }, [artist, onClose]);
+
+  if (!artist) return null;
+
+  return (
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+      style={{ animation: 'fadeIn 0.2s ease' }}
+    >
+      {/* Backdrop */}
+      <div
+        className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+        onClick={onClose}
+      />
+
+      {/* Panel */}
+      <div
+        className="relative w-full max-w-lg bg-[#1a120b] border border-[#3a2a18] rounded-2xl overflow-hidden shadow-2xl shadow-black/60"
+        style={{ animation: 'modalSlideUp 0.25s ease', maxHeight: '90vh', overflowY: 'auto' }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Nút đóng */}
+        <button
+          onClick={onClose}
+          className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-[#0f0904]/80 border border-[#3a2a18] flex items-center justify-center text-[#a39788] hover:text-[#cda052] hover:border-[#cda052]/50 transition-colors backdrop-blur-sm"
+        >
+          <X className="w-4 h-4" />
+        </button>
+
+        {/* Ảnh hero */}
+        {artist.image && artist.image.length > 0 && (
+          <div className="relative h-64 overflow-hidden flex-shrink-0">
+            <div className="flex h-full">
+              {artist.image.map((src, i) => (
+                <img
+                  key={i}
+                  src={src}
+                  alt={artist.name}
+                  className="h-full object-cover object-top"
+                  style={{ width: `${100 / artist.image.length}%` }}
+                />
+              ))}
+            </div>
+            {/* Gradient phủ đáy */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#1a120b] via-[#1a120b]/20 to-transparent" />
+            {/* Badge danh hiệu */}
+            <div className="absolute bottom-4 left-5">
+              <span className="text-[10px] bg-[#cda052]/20 text-[#cda052] border border-[#cda052]/40 px-3 py-1 rounded-full uppercase tracking-widest backdrop-blur-sm font-bold">
+                {artist.badge}
+              </span>
+            </div>
+          </div>
+        )}
+
+        {/* Nội dung */}
+        <div className="p-6">
+          {/* Tên & chức danh */}
+          <div className="mb-4">
+            <h3 className="font-serif text-xl font-bold text-[#f3e1c3] leading-tight mb-1">{artist.name}</h3>
+            <p className="text-sm text-[#cda052] italic">{artist.title}</p>
+          </div>
+
+          {/* Divider */}
+          <div className="flex items-center gap-3 mb-5">
+            <div className="h-px flex-1 bg-gradient-to-r from-[#cda052]/50 to-transparent" />
+            <div className="w-1 h-1 rounded-full bg-[#cda052]" />
+            <div className="h-px flex-1 bg-gradient-to-l from-[#cda052]/50 to-transparent" />
+          </div>
+
+          {/* Tiểu sử */}
+          {artist.bio && (
+            <div className="mb-5">
+              <h4 className="text-[10px] uppercase tracking-widest text-[#cda052] font-bold mb-2 flex items-center gap-1.5">
+                <span className="w-3 h-px bg-[#cda052]" />
+                Tiểu sử
+              </h4>
+              <p className="text-sm text-[#cdbfad] font-light leading-relaxed text-justify">{artist.bio}</p>
+            </div>
+          )}
+
+          {/* Vở diễn tiêu biểu */}
+          {artist.notable && (
+            <div className="mb-5">
+              <h4 className="text-[10px] uppercase tracking-widest text-[#cda052] font-bold mb-2 flex items-center gap-1.5">
+                <span className="w-3 h-px bg-[#cda052]" />
+                Vở diễn tiêu biểu
+              </h4>
+              <div className="flex flex-wrap gap-2">
+                {artist.notable.map((item, i) => (
+                  <span key={i} className="text-xs bg-[#2d1f11] border border-[#3a2a18] text-[#e6dfd5] px-3 py-1 rounded-full">
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Danh hiệu & giải thưởng */}
+          {artist.awards && (
+            <div>
+              <h4 className="text-[10px] uppercase tracking-widest text-[#cda052] font-bold mb-2 flex items-center gap-1.5">
+                <span className="w-3 h-px bg-[#cda052]" />
+                Danh hiệu & Giải thưởng
+              </h4>
+              <div className="flex flex-wrap gap-2">
+                {artist.awards.map((item, i) => (
+                  <span key={i} className="text-xs bg-[#cda052]/10 border border-[#cda052]/30 text-[#cda052] px-3 py-1 rounded-full">
+                    🏆 {item}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ==========================================
+// 5. COMPONENT CHÍNH: APP
 // ==========================================
 export default function App() {
   const [activeInstrument, setActiveInstrument] = useState(MUSEUM_DATA.instruments[0]);
   const [activeSection, setActiveSection] = useState("hero");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [selectedArtist, setSelectedArtist] = useState(null);
 
   useReveal();
 
@@ -911,25 +1071,109 @@ export default function App() {
                 {MUSEUM_DATA.classics.artists.map((art, idx) => (
                   <div
                     key={idx}
-                    className="card-glow bg-[#1a120b] border border-[#2d1f11] rounded-xl p-5 group cursor-default relative overflow-hidden"
+                    onClick={() => setSelectedArtist(art)}
+                    className="card-glow bg-[#1a120b] border border-[#2d1f11] rounded-xl group cursor-pointer relative overflow-hidden flex flex-col hover:border-[#cda052]/50 transition-colors duration-300"
                   >
-                    <div className="absolute top-0 right-0 opacity-10 text-7xl leading-none pointer-events-none select-none font-serif text-[#cda052]">
-                      {idx + 1}
+                    {/* Ảnh nghệ sĩ */}
+                    {art.image && art.image.length > 0 && (
+                      <div className="relative h-48 overflow-hidden flex-shrink-0">
+                        <div className="flex h-full">
+                          {art.image.map((src, imgIdx) => (
+                            <img
+                              key={imgIdx}
+                              src={src}
+                              alt={art.name}
+                              className="h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                              style={{ width: `${100 / art.image.length}%` }}
+                            />
+                          ))}
+                        </div>
+                        {/* Gradient phủ đáy */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#1a120b] via-[#1a120b]/30 to-transparent" />
+                        {/* Badge số thứ tự */}
+                        <div className="absolute top-3 left-3 w-7 h-7 rounded-full bg-[#0f0904]/80 border border-[#cda052]/50 flex items-center justify-center backdrop-blur-sm">
+                          <span className="text-[#cda052] text-xs font-bold font-serif">{idx + 1}</span>
+                        </div>
+                        {/* Badge danh hiệu */}
+                        <div className="absolute top-3 right-3">
+                          <span className="text-[10px] bg-[#cda052]/20 text-[#cda052] border border-[#cda052]/40 px-2 py-0.5 rounded-full uppercase tracking-wider backdrop-blur-sm">
+                            {art.badge}
+                          </span>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Nội dung text */}
+                    <div className="p-5 flex flex-col flex-1">
+                      {/* Nếu không có ảnh thì hiện badge cũ kiểu */}
+                      {(!art.image || art.image.length === 0) && (
+                        <div className="flex items-start justify-between mb-3">
+                          <Award className="w-4 h-4 text-[#cda052] flex-shrink-0 mt-0.5" />
+                          <span className="text-[10px] bg-[#cda052]/10 text-[#cda052] border border-[#cda052]/20 px-2 py-0.5 rounded-full uppercase tracking-wider">
+                            {art.badge}
+                          </span>
+                        </div>
+                      )}
+                      <div className="flex items-center gap-2 mb-1">
+                        <Award className="w-3.5 h-3.5 text-[#cda052] flex-shrink-0" />
+                        <h4 className="font-serif text-[#f3e1c3] font-bold text-sm">{art.name}</h4>
+                      </div>
+                      <p className="text-xs text-[#cda052] mb-2 italic pl-5">{art.title}</p>
+                      <p className="text-xs text-[#a39788] font-light leading-relaxed pl-5">{art.role}</p>
+                      {/* Gợi ý click */}
+                      <div className="mt-3 pl-5 flex items-center gap-1 text-[10px] text-[#5e4f3c] group-hover:text-[#cda052] transition-colors">
+                        <span>Xem chi tiết</span>
+                        <span className="group-hover:translate-x-0.5 transition-transform">→</span>
+                      </div>
                     </div>
-                    <div className="flex items-start justify-between mb-3">
-                      <Award className="w-4 h-4 text-[#cda052] flex-shrink-0 mt-0.5" />
-                      <span className="text-[10px] bg-[#cda052]/10 text-[#cda052] border border-[#cda052]/20 px-2 py-0.5 rounded-full uppercase tracking-wider">
-                        {art.badge}
-                      </span>
-                    </div>
-                    <h4 className="font-serif text-[#f3e1c3] font-bold text-sm mb-1">{art.name}</h4>
-                    <p className="text-xs text-[#cda052] mb-2 italic">{art.title}</p>
-                    <p className="text-xs text-[#a39788] font-light leading-relaxed">{art.role}</p>
                   </div>
                 ))}
               </div>
             </div>
           </div>
+
+          {/* ============================
+              YOUTUBE - NGHE CẢI LƯƠNG
+              ============================ */}
+          <div className="reveal mt-16">
+            {/* Header */}
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-8 h-px bg-[#cda052]" />
+              <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#cda052]">
+                Thưởng Thức Cải Lương
+              </span>
+              <div className="flex-1 h-px bg-gradient-to-r from-[#cda052]/40 to-transparent" />
+            </div>
+
+            {/* Khung video */}
+            <div className="bg-[#0d0906] border border-[#2d1f11] rounded-2xl overflow-hidden shadow-2xl">
+              {/* Thanh tiêu đề giả terminal */}
+              <div className="flex items-center justify-between px-5 py-3 border-b border-[#2d1f11] bg-[#120c08]">
+                <div className="flex items-center gap-2">
+                  <div className="w-2.5 h-2.5 rounded-full bg-[#e55353]" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-[#cda052]" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-[#4d9e4d]" />
+                </div>
+                <span className="text-xs text-[#5e4f3c] uppercase tracking-widest">
+                  🎭 Cải Lương Kinh Điển · YouTube
+                </span>
+                <Music className="w-4 h-4 text-[#5e4f3c]" />
+              </div>
+
+              {/* iFrame 16:9 responsive */}
+              <div className="relative w-full" style={{ paddingTop: '56.25%' }}>
+                <iframe
+                  className="absolute top-0 left-0 w-full h-full"
+                  src="https://www.youtube.com/embed/4bgZDxjDOiw?list=RD4bgZDxjDOiw&start_radio=1"
+                  title="Cải Lương Kinh Điển"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                  style={{ border: 0 }}
+                />
+              </div>
+            </div>
+          </div>
+
         </div>
       </section>
 
@@ -1099,6 +1343,8 @@ export default function App() {
         </div>
       </footer>
 
+      {/* Artist Modal */}
+      <ArtistModal artist={selectedArtist} onClose={() => setSelectedArtist(null)} />
     </div>
   );
 }
