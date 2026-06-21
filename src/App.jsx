@@ -12,7 +12,7 @@ const MUSEUM_DATA = {
   hero: {
     title: "Nghệ thuật Sân khấu Cải lương",
     subtitle: "Từ Truyền Thống Đến Hiện Đại",
-    introQuestion: "Có bạn nào biết cách đây hơn 60 năm, thứ âm nhạc nào đã từng thống trị phần lớn thị trường giải trí, khiến người dân xếp hàng dài qua đêm và sẵn sàng bỏ ra số tiền tương đương cả một chỉ vàng chỉ để đổi lấy một cặp vé chợ đen vào rạp?",
+
     introAnswer: "Vào thời kỳ hoàng kim của thập niên 1960, Cải lương chính là 'ông hoàng phòng vé', là văn hóa đại chúng đỉnh cao của người Việt Nam."
   },
   origins: {
@@ -501,10 +501,6 @@ export default function App() {
 
 
 
-            <div className="absolute -top-5 left-6 text-7xl leading-none text-[#3a2a18] font-serif select-none z-10">"</div>
-            <p className="text-[#cda052] italic mb-5 text-base md:text-lg relative z-10 leading-relaxed">
-              {MUSEUM_DATA.hero.introQuestion}
-            </p>
             <div className="h-px bg-gradient-to-r from-[#3a2a18] via-[#cda052]/30 to-[#3a2a18] mb-5 relative z-10"></div>
             <p className="text-[#e6dfd5]/80 font-light text-sm leading-relaxed relative z-10">
               {MUSEUM_DATA.hero.introAnswer}
