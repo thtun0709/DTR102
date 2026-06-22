@@ -424,15 +424,20 @@ function ArtistModal({ artist, onClose }) {
                 className="absolute inset-0 w-full h-full object-cover object-top"
               />
             ) : (
-              <div className="absolute inset-0 flex flex-col">
+              // Nhiều ảnh: xếp ngang (side-by-side) để thấy khuôn mặt từng người
+              <div className="absolute inset-0 flex flex-row">
                 {artist.image.map((src, i) => (
-                  <img
-                    key={i}
-                    src={src}
-                    alt={artist.name}
-                    className="w-full object-cover object-top"
-                    style={{ height: `${100 / artist.image.length}%` }}
-                  />
+                  <div key={i} className="relative flex-1 h-full overflow-hidden">
+                    <img
+                      src={src}
+                      alt={artist.name}
+                      className="absolute inset-0 w-full h-full object-cover object-top"
+                    />
+                    {/* Đường phân cách mỏng giữa 2 ảnh */}
+                    {i < artist.image.length - 1 && (
+                      <div className="absolute right-0 top-0 bottom-0 w-px bg-[#3a2a18]/60" />
+                    )}
+                  </div>
                 ))}
               </div>
             )}
