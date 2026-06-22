@@ -10,6 +10,8 @@ import imgLeThuyMinhVuong from './assets/le-thuy-minh-vuong.png';
 import imgBachTuyet from './assets/bach-tuyet.png';
 import imgVuLinh from './assets/vu-linh.png';
 import imgThanhNga from './assets/thanh-nga.png';
+import imgTrangPhuc1 from './assets/trang-phuc1.png';
+import imgTrangPhuc2 from './assets/trang-phuc2.png';
 
 // ==========================================
 // 1. MOCK DATA - NỘI DUNG BẢO TÀNG
@@ -902,6 +904,41 @@ export default function App() {
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* ── Gallery trang phục cải lương ── */}
+          <div className="mt-14 reveal">
+            <div className="flex items-center gap-4 mb-8 justify-center">
+              <div className="h-px w-16 bg-gradient-to-r from-transparent to-[#cda052]" />
+              <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#cda052]">Trang Phục Cải Lương</span>
+              <div className="h-px w-16 bg-gradient-to-l from-transparent to-[#cda052]" />
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              {[
+                { src: imgTrangPhuc1, label: "Trang Phục 1", desc: "Phục trang tuồng lịch sử & cung đình" },
+                { src: imgTrangPhuc2, label: "Trang Phục 2", desc: "Phục trang tuồng hương xa & kiếm hiệp" }
+              ].map((item, i) => (
+                <div key={i} className="group relative rounded-2xl overflow-hidden border border-[#2d1f11] shadow-xl">
+                  {/* Hình ảnh */}
+                  <div className="relative overflow-hidden" style={{ aspectRatio: '4/3' }}>
+                    <img
+                      src={item.src}
+                      alt={item.label}
+                      className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                    />
+                    {/* Gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#1a120b] via-[#1a120b]/30 to-transparent" />
+                    {/* Caption nổi lên khi hover */}
+                    <div className="absolute bottom-0 left-0 right-0 p-5">
+                      <p className="font-serif text-base font-bold text-[#f3e1c3] mb-1">{item.label}</p>
+                      <p className="text-xs text-[#cda052] tracking-wide opacity-0 group-hover:opacity-100 transition-opacity duration-300">{item.desc}</p>
+                    </div>
+                    {/* Viền vàng xuất hiện khi hover */}
+                    <div className="absolute inset-0 border-2 border-[#cda052]/0 group-hover:border-[#cda052]/40 rounded-2xl transition-all duration-300" />
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
