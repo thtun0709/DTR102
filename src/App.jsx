@@ -407,38 +407,43 @@ function ArtistModal({ artist, onClose }) {
         onClick={onClose}
       />
 
-      {/* Panel */}
+      {/* Panel - layout 2 cột: ảnh trái | nội dung phải */}
       <div
-        className="relative w-full max-w-lg bg-[#1a120b] border border-[#3a2a18] rounded-2xl overflow-hidden shadow-2xl shadow-black/60"
-        style={{ animation: 'modalSlideUp 0.25s ease', maxHeight: '90vh', overflowY: 'auto' }}
+        className="relative w-full max-w-3xl bg-[#1a120b] border border-[#3a2a18] rounded-2xl overflow-hidden shadow-2xl shadow-black/60 flex"
+        style={{ animation: 'modalSlideUp 0.25s ease', maxHeight: '88vh' }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Nút đóng */}
-        <button
-          onClick={onClose}
-          className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-[#0f0904]/80 border border-[#3a2a18] flex items-center justify-center text-[#a39788] hover:text-[#cda052] hover:border-[#cda052]/50 transition-colors backdrop-blur-sm"
-        >
-          <X className="w-4 h-4" />
-        </button>
-
-        {/* Ảnh hero */}
+        {/* ── CỘT TRÁI: Ảnh nghệ sĩ ── */}
         {artist.image && artist.image.length > 0 && (
-          <div className="relative h-64 overflow-hidden flex-shrink-0">
-            <div className="flex h-full">
-              {artist.image.map((src, i) => (
-                <img
-                  key={i}
-                  src={src}
-                  alt={artist.name}
-                  className="h-full object-cover object-top"
-                  style={{ width: `${100 / artist.image.length}%` }}
-                />
-              ))}
-            </div>
-            {/* Gradient phủ đáy */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#1a120b] via-[#1a120b]/20 to-transparent" />
-            {/* Badge danh hiệu */}
-            <div className="absolute bottom-4 left-5">
+          <div className="relative flex-shrink-0 w-2/5 min-h-full">
+            {/* Ảnh fill toàn bộ cột, object-position top để hiển thị khuôn mặt */}
+            {artist.image.length === 1 ? (
+              <img
+                src={artist.image[0]}
+                alt={artist.name}
+                className="absolute inset-0 w-full h-full object-cover object-top"
+              />
+            ) : (
+              <div className="absolute inset-0 flex flex-col">
+                {artist.image.map((src, i) => (
+                  <img
+                    key={i}
+                    src={src}
+                    alt={artist.name}
+                    className="w-full object-cover object-top"
+                    style={{ height: `${100 / artist.image.length}%` }}
+                  />
+                ))}
+              </div>
+            )}
+
+            {/* Gradient che sang phải để blend với nội dung */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[#1a120b]/70" />
+            {/* Gradient nhẹ từ dưới lên để che caption */}
+            <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#1a120b]/80 to-transparent" />
+
+            {/* Badge danh hiệu đặt góc dưới trái */}
+            <div className="absolute bottom-4 left-4">
               <span className="text-[10px] bg-[#cda052]/20 text-[#cda052] border border-[#cda052]/40 px-3 py-1 rounded-full uppercase tracking-widest backdrop-blur-sm font-bold">
                 {artist.badge}
               </span>
@@ -446,65 +451,75 @@ function ArtistModal({ artist, onClose }) {
           </div>
         )}
 
-        {/* Nội dung */}
-        <div className="p-6">
-          {/* Tên & chức danh */}
-          <div className="mb-4">
-            <h3 className="font-serif text-xl font-bold text-[#f3e1c3] leading-tight mb-1">{artist.name}</h3>
-            <p className="text-sm text-[#cda052] italic">{artist.title}</p>
-          </div>
+        {/* ── CỘT PHẢI: Nội dung cuộn ── */}
+        <div className="flex-1 overflow-y-auto" style={{ maxHeight: '88vh' }}>
+          {/* Nút đóng */}
+          <button
+            onClick={onClose}
+            className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-[#0f0904]/80 border border-[#3a2a18] flex items-center justify-center text-[#a39788] hover:text-[#cda052] hover:border-[#cda052]/50 transition-colors backdrop-blur-sm"
+          >
+            <X className="w-4 h-4" />
+          </button>
 
-          {/* Divider */}
-          <div className="flex items-center gap-3 mb-5">
-            <div className="h-px flex-1 bg-gradient-to-r from-[#cda052]/50 to-transparent" />
-            <div className="w-1 h-1 rounded-full bg-[#cda052]" />
-            <div className="h-px flex-1 bg-gradient-to-l from-[#cda052]/50 to-transparent" />
-          </div>
-
-          {/* Tiểu sử */}
-          {artist.bio && (
-            <div className="mb-5">
-              <h4 className="text-[10px] uppercase tracking-widest text-[#cda052] font-bold mb-2 flex items-center gap-1.5">
-                <span className="w-3 h-px bg-[#cda052]" />
-                Tiểu sử
-              </h4>
-              <p className="text-sm text-[#cdbfad] font-light leading-relaxed text-justify">{artist.bio}</p>
+          <div className="p-6 pt-10">
+            {/* Tên & chức danh */}
+            <div className="mb-4">
+              <h3 className="font-serif text-xl font-bold text-[#f3e1c3] leading-tight mb-1">{artist.name}</h3>
+              <p className="text-sm text-[#cda052] italic">{artist.title}</p>
             </div>
-          )}
 
-          {/* Vở diễn tiêu biểu */}
-          {artist.notable && (
-            <div className="mb-5">
-              <h4 className="text-[10px] uppercase tracking-widest text-[#cda052] font-bold mb-2 flex items-center gap-1.5">
-                <span className="w-3 h-px bg-[#cda052]" />
-                Vở diễn tiêu biểu
-              </h4>
-              <div className="flex flex-wrap gap-2">
-                {artist.notable.map((item, i) => (
-                  <span key={i} className="text-xs bg-[#2d1f11] border border-[#3a2a18] text-[#e6dfd5] px-3 py-1 rounded-full">
-                    {item}
-                  </span>
-                ))}
+            {/* Divider */}
+            <div className="flex items-center gap-3 mb-5">
+              <div className="h-px flex-1 bg-gradient-to-r from-[#cda052]/50 to-transparent" />
+              <div className="w-1 h-1 rounded-full bg-[#cda052]" />
+              <div className="h-px flex-1 bg-gradient-to-l from-[#cda052]/50 to-transparent" />
+            </div>
+
+            {/* Tiểu sử */}
+            {artist.bio && (
+              <div className="mb-5">
+                <h4 className="text-[10px] uppercase tracking-widest text-[#cda052] font-bold mb-2 flex items-center gap-1.5">
+                  <span className="w-3 h-px bg-[#cda052]" />
+                  Tiểu sử
+                </h4>
+                <p className="text-sm text-[#cdbfad] font-light leading-relaxed text-justify">{artist.bio}</p>
               </div>
-            </div>
-          )}
+            )}
 
-          {/* Danh hiệu & giải thưởng */}
-          {artist.awards && (
-            <div>
-              <h4 className="text-[10px] uppercase tracking-widest text-[#cda052] font-bold mb-2 flex items-center gap-1.5">
-                <span className="w-3 h-px bg-[#cda052]" />
-                Danh hiệu & Giải thưởng
-              </h4>
-              <div className="flex flex-wrap gap-2">
-                {artist.awards.map((item, i) => (
-                  <span key={i} className="text-xs bg-[#cda052]/10 border border-[#cda052]/30 text-[#cda052] px-3 py-1 rounded-full">
-                    🏆 {item}
-                  </span>
-                ))}
+            {/* Vở diễn tiêu biểu */}
+            {artist.notable && (
+              <div className="mb-5">
+                <h4 className="text-[10px] uppercase tracking-widest text-[#cda052] font-bold mb-2 flex items-center gap-1.5">
+                  <span className="w-3 h-px bg-[#cda052]" />
+                  Vở diễn tiêu biểu
+                </h4>
+                <div className="flex flex-wrap gap-2">
+                  {artist.notable.map((item, i) => (
+                    <span key={i} className="text-xs bg-[#2d1f11] border border-[#3a2a18] text-[#e6dfd5] px-3 py-1 rounded-full">
+                      {item}
+                    </span>
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
+            )}
+
+            {/* Danh hiệu & giải thưởng */}
+            {artist.awards && (
+              <div className="pb-2">
+                <h4 className="text-[10px] uppercase tracking-widest text-[#cda052] font-bold mb-2 flex items-center gap-1.5">
+                  <span className="w-3 h-px bg-[#cda052]" />
+                  Danh hiệu & Giải thưởng
+                </h4>
+                <div className="flex flex-wrap gap-2">
+                  {artist.awards.map((item, i) => (
+                    <span key={i} className="text-xs bg-[#cda052]/10 border border-[#cda052]/30 text-[#cda052] px-3 py-1 rounded-full">
+                      🏆 {item}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
