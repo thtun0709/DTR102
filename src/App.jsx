@@ -1098,22 +1098,16 @@ export default function App() {
                 <Music className="w-4 h-4 text-[#5e4f3c]" />
               </div>
 
-              {/* iFrame Sketchfab - Tất cả 3 iframe được render ngay từ đầu với key cố định.
-                  Chuyển đổi bằng CSS display:block/none để WebGL context KHÔNG bị hủy và tạo lại,
-                  tránh crash khi bấm chuyển qua lại trên mobile */}
+              {/* iFrame Sketchfab - Chỉ render duy nhất mô hình của nhạc cụ đang được lựa chọn.
+                  Điều này giúp tránh lỗi trình duyệt chặn tải tài nguyên WebGL do display:none ban đầu */}
               <div className="sketchfab-container flex-1" style={{ paddingTop: '60%' }}>
-                {MUSEUM_DATA.instruments.map((inst) => (
-                  <iframe
-                    key={`sf-${inst.id}`}
-                    title={inst.name}
-                    allowFullScreen
-                    allow="autoplay; fullscreen; xr-spatial-tracking"
-                    src={`https://sketchfab.com/models/${inst.sketchfabId}/embed?autostart=1&camera=0&preload=1&theme=dark&ui_infos=0&ui_watermark=0`}
-                    style={{
-                      display: activeInstrument.id === inst.id ? 'block' : 'none',
-                    }}
-                  ></iframe>
-                ))}
+                <iframe
+                  key={`sf-${activeInstrument.id}`}
+                  title={activeInstrument.name}
+                  allowFullScreen
+                  allow="autoplay; fullscreen; xr-spatial-tracking"
+                  src={`https://sketchfab.com/models/${activeInstrument.sketchfabId}/embed?autostart=1&camera=0&preload=1&theme=dark&ui_infos=0&ui_watermark=0`}
+                ></iframe>
               </div>
 
               {/* Info dưới viewer */}
