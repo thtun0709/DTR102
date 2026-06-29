@@ -12,6 +12,8 @@ import imgVuLinh from './assets/vu-linh.png';
 import imgThanhNga from './assets/thanh-nga.png';
 import imgTrangPhuc1 from './assets/trang-phuc1.png';
 import imgTrangPhuc2 from './assets/trang-phuc2.png';
+import imgHinhNenBanner from './assets/hinhnenbanner.jpg';
+import nhacNen from './assets/nhacnen.mp3';
 
 // ==========================================
 // 1. MOCK DATA - NỘI DUNG BẢO TÀNG
@@ -542,8 +544,52 @@ export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [selectedArtist, setSelectedArtist] = useState(null);
+  const [showCurtain, setShowCurtain] = useState(true);
+  const [animateCurtain, setAnimateCurtain] = useState(false);
+  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
+  const audioRef = useRef(null);
 
   useReveal();
+
+  useEffect(() => {
+    // Khởi tạo đối tượng audio trên client side với file local
+    audioRef.current = new Audio(nhacNen);
+    audioRef.current.volume = 0.15;
+    audioRef.current.loop = true;
+
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+    };
+  }, []);
+
+  const toggleMusic = () => {
+    if (!audioRef.current) return;
+    if (isMusicPlaying) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play().catch((err) => {
+        console.log("Audio autoplay restriction: ", err);
+      });
+    }
+    setIsMusicPlaying(!isMusicPlaying);
+  };
+
+  useEffect(() => {
+    const startAnim = setTimeout(() => {
+      setAnimateCurtain(true);
+    }, 400);
+
+    const removeCurtain = setTimeout(() => {
+      setShowCurtain(false);
+    }, 2400);
+
+    return () => {
+      clearTimeout(startAnim);
+      clearTimeout(removeCurtain);
+    };
+  }, []);
 
   // Tối ưu hóa việc cập nhật trạng thái scrolled (chỉ set khi thay đổi trạng thái, tránh re-render liên tục)
   useEffect(() => {
@@ -600,6 +646,14 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#120c08] text-[#e6dfd5]">
+
+      {/* Hiệu ứng mở màn sân khấu */}
+      {showCurtain && (
+        <div className="fixed inset-0 z-[9999] flex overflow-hidden pointer-events-none">
+          <div className={`w-1/2 h-full curtain-left ${animateCurtain ? '-translate-x-full' : 'translate-x-0'}`}></div>
+          <div className={`w-1/2 h-full curtain-right ${animateCurtain ? 'translate-x-full' : 'translate-x-0'}`}></div>
+        </div>
+      )}
 
       {/* ============================
           THANH ĐIỀU HƯỚNG (NAVBAR)
@@ -676,28 +730,24 @@ export default function App() {
           ============================ */}
       <section
         id="hero"
-        className="relative min-h-screen flex flex-col justify-center items-center text-center px-4 overflow-hidden"
-        style={{
-          background: 'radial-gradient(ellipse at 50% 40%, #2d1e10 0%, #120c08 50%, #0a0604 100%)'
-        }}
+        className="relative h-screen w-full flex flex-col justify-between items-center text-center overflow-hidden bg-[#120c08]"
       >
-        {/* Dot grid nền */}
-        <div
-          className="absolute inset-0 dot-grid opacity-[0.06]"
-          style={{ backgroundSize: '28px 28px' }}
-        ></div>
+        {/* Hình nền Banner bao phủ toàn bộ khung (full 100vh) */}
+        <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
+          <img
+            src={imgHinhNenBanner}
+            alt="Banner Cải Lương"
+            className="w-full h-full object-cover object-center opacity-70"
+          />
+          {/* Lớp phủ gradient chuyển sắc mượt mà từ trên xuống dưới */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-[#120c08]/75 to-[#120c08]"></div>
+        </div>
 
-        {/* Glow circles trang trí */}
-        <div className="absolute top-1/3 left-1/4 w-96 h-96 bg-[#cda052] rounded-full blur-[160px] opacity-5 pointer-events-none"></div>
-        <div className="absolute bottom-1/3 right-1/4 w-64 h-64 bg-[#cda052] rounded-full blur-[120px] opacity-5 pointer-events-none"></div>
-
-        {/* Ornamental line trên */}
-        <div className="absolute top-24 left-1/2 -translate-x-1/2 w-px h-16 bg-gradient-to-b from-transparent to-[#3a2a18]"></div>
-
-        <div className="max-w-4xl z-10">
-          {/* Tiêu đề chính */}
-          <h1
-            className="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.1] mb-6 mt-12"
+        {/* NỬA TRÊN: Chữ "Nghệ thuật Sân khấu" */}
+        <div className="relative w-full h-[46vh] flex flex-col justify-end items-center pb-2">
+          {/* Chữ "Nghệ thuật Sân khấu" nằm đè lên hình nền */}
+          <span 
+            className="z-10 block font-serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.2] pb-3 text-[#f3e1c3] drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]"
             style={{
               background: 'linear-gradient(135deg, #f3e1c3 0%, #cda052 40%, #e8c97a 70%, #f3e1c3 100%)',
               WebkitBackgroundClip: 'text',
@@ -705,17 +755,46 @@ export default function App() {
               backgroundClip: 'text'
             }}
           >
-            {MUSEUM_DATA.hero.title}
+            Nghệ thuật Sân khấu
+          </span>
+        </div>
+
+        {/* Khoảng đệm ranh giới ở giữa (bỏ vạch dọc) */}
+        <div className="z-10 h-[6vh]"></div>
+
+        {/* NỬA DƯỚI: Chữ "Cải lương" + Phụ đề + Intro Box */}
+        <div className="relative w-full h-[48vh] flex flex-col justify-start items-center pt-2 px-4 z-10">
+          {/* Dot grid nền mờ ảo ở nửa dưới */}
+          <div
+            className="absolute inset-0 dot-grid opacity-[0.03] pointer-events-none"
+            style={{ backgroundSize: '28px 28px' }}
+          ></div>
+
+          {/* Glow circles trang trí */}
+          <div className="absolute -top-12 left-1/4 w-72 h-72 bg-[#cda052] rounded-full blur-[120px] opacity-5 pointer-events-none"></div>
+
+          {/* Chữ "Cải lương" ngay dưới vạch cắt */}
+          <h1
+            className="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.2] pb-3 mb-3 drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]"
+            style={{
+              background: 'linear-gradient(135deg, #f3e1c3 0%, #cda052 40%, #e8c97a 70%, #f3e1c3 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text'
+            }}
+          >
+            Cải lương
           </h1>
 
-          <p className="font-serif text-xl md:text-2xl text-[#a39788] italic mb-12">
+          {/* Phụ đề */}
+          <p className="font-serif text-lg md:text-xl text-[#a39788] italic mb-6">
             {MUSEUM_DATA.hero.subtitle}
           </p>
 
-          {/* Card câu hỏi mở đầu */}
-          <div className="relative w-full max-w-2xl mx-auto bg-[#1a120b]/90 border border-[#3a2a18] rounded-2xl p-6 md:p-8 shadow-2xl backdrop-blur-sm text-left mb-8 overflow-hidden">
-            {/* Background Trống Đồng xoay chậm nổi bật */}
-            <div className="absolute -right-12 -bottom-12 w-48 h-48 md:-right-20 md:-bottom-20 md:w-80 md:h-80 opacity-20 pointer-events-none z-0 animate-spin-slow">
+          {/* Card câu hỏi mở đầu - Làm gọn lại để tránh tràn màn hình */}
+          <div className="relative w-full max-w-xl mx-auto bg-[#1a120b]/90 border border-[#3a2a18] rounded-xl p-4 md:p-5 shadow-2xl backdrop-blur-sm text-left mb-6 overflow-hidden">
+            {/* Background Trống Đồng xoay chậm mờ */}
+            <div className="absolute -right-8 -bottom-8 w-32 h-32 md:-right-12 md:-bottom-12 md:w-52 md:h-52 opacity-15 pointer-events-none z-0 animate-spin-slow">
               <img
                 src={bronzeDrum}
                 alt="Trống đồng Đông Sơn"
@@ -723,23 +802,21 @@ export default function App() {
               />
             </div>
 
-
-
-            <div className="h-px bg-gradient-to-r from-[#3a2a18] via-[#cda052]/30 to-[#3a2a18] mb-5 relative z-10"></div>
-            <p className="text-[#e6dfd5]/80 font-light text-sm leading-relaxed relative z-10">
+            <div className="h-px bg-gradient-to-r from-[#3a2a18] via-[#cda052]/30 to-[#3a2a18] mb-3.5 relative z-10"></div>
+            <p className="text-[#e6dfd5]/80 font-light text-xs md:text-sm leading-relaxed relative z-10">
               {MUSEUM_DATA.hero.introAnswer}
             </p>
           </div>
 
-          {/* Scroll indicator (được bọc trong container flex để căn giữa tuyệt đối) */}
+          {/* Scroll down indicator ở sát đáy */}
           <button
             onClick={() => scrollTo('origins')}
-            className="flex flex-col items-center gap-1.5 opacity-50 hover:opacity-100 transition-opacity cursor-pointer animate-bounce group focus:outline-none z-20 mx-auto"
+            className="mt-auto mb-4 flex flex-col items-center gap-1 opacity-55 hover:opacity-100 transition-opacity cursor-pointer animate-bounce group focus:outline-none"
           >
-            <span className="text-[10px] text-[#a39788] group-hover:text-[#cda052] tracking-widest uppercase transition-colors">
+            <span className="text-[9px] text-[#a39788] group-hover:text-[#cda052] tracking-widest uppercase transition-colors">
               Cuộn xuống
             </span>
-            <ChevronDown className="w-4 h-4 text-[#cda052]" />
+            <ChevronDown className="w-3.5 h-3.5 text-[#cda052]" />
           </button>
         </div>
       </section>
@@ -1545,6 +1622,46 @@ export default function App() {
 
       {/* Artist Modal */}
       <ArtistModal artist={selectedArtist} onClose={() => setSelectedArtist(null)} />
+
+      {/* Widget Đĩa Hát Cổ Điển Phát Nhạc Nền */}
+      <div className="fixed bottom-6 right-6 z-40 flex items-center gap-3 group">
+        {/* Tooltip hiển thị khi hover */}
+        <div className="hidden md:block bg-[#1a120b] border border-[#3a2a18] text-[#cda052] text-xs px-3 py-1.5 rounded-lg shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap">
+          {isMusicPlaying ? 'Tạm dừng nhạc nền' : 'Thưởng thức nhạc cổ truyền'}
+        </div>
+
+        <button
+          onClick={toggleMusic}
+          className="relative w-14 h-14 md:w-16 md:h-16 rounded-full bg-[#0d0805] border border-[#3a2a18] shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-105 hover:border-[#cda052] focus:outline-none"
+        >
+          {/* Đĩa than */}
+          <div className={`w-12 h-12 md:w-14 md:h-14 rounded-full bg-[#150f0b] border border-[#2d1f11] relative flex items-center justify-center shadow-inner ${isMusicPlaying ? 'vinyl-spin' : ''}`}>
+            {/* Rãnh đĩa đồng tâm */}
+            <div className="absolute inset-1 rounded-full border border-dashed border-[#ffffff]/5"></div>
+            <div className="absolute inset-2.5 rounded-full border border-solid border-[#ffffff]/5"></div>
+            
+            {/* Nhãn đĩa màu vàng gold ở giữa */}
+            <div className="w-4 h-4 md:w-5 md:h-5 rounded-full bg-gradient-to-tr from-[#a39788] via-[#cda052] to-[#f3e1c3] flex items-center justify-center shadow-md">
+              {/* Lỗ tâm đĩa */}
+              <div className="w-1.5 h-1.5 rounded-full bg-[#150f0b]"></div>
+            </div>
+          </div>
+
+          {/* Biểu tượng Trạng thái nhỏ ở góc */}
+          <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-[#cda052] text-[#120c08] border border-[#1a120b] flex items-center justify-center text-[10px] font-bold shadow-md">
+            {isMusicPlaying ? '⏸' : '▶'}
+          </div>
+
+          {/* Các nốt nhạc bay lơ lửng khi đang phát */}
+          {isMusicPlaying && (
+            <>
+              <span className="music-note absolute text-xs text-[#cda052] top-[-10px] left-[10px] opacity-0" style={{ '--x-offset': '-15px', animationDelay: '0s' }}>♫</span>
+              <span className="music-note absolute text-sm text-[#f3e1c3] top-[-15px] right-[10px] opacity-0" style={{ '--x-offset': '15px', animationDelay: '0.7s' }}>♪</span>
+              <span className="music-note absolute text-xs text-[#cda052] top-[-8px] right-[25px] opacity-0" style={{ '--x-offset': '5px', animationDelay: '1.4s' }}>♬</span>
+            </>
+          )}
+        </button>
+      </div>
     </div>
   );
 }

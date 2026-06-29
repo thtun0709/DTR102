@@ -277,3 +277,54 @@ body::before {
   background: var(--border-warm);
   border-radius: 2px;
 }
+
+/* ============================
+   HIỆU ỨNG RÈM NHUNG SÂN KHẤU
+   ============================ */
+.curtain-left {
+  background: linear-gradient(to right, #1d0000 0%, #4a0000 20%, #2b0000 40%, #5c0000 60%, #300000 80%, #3d0000 100%);
+  border-right: 3px solid var(--gold);
+  box-shadow: 8px 0 25px rgba(0, 0, 0, 0.7);
+  transition: transform 1.8s cubic-bezier(0.76, 0, 0.24, 1);
+  will-change: transform;
+}
+
+.curtain-right {
+  background: linear-gradient(to left, #1d0000 0%, #4a0000 20%, #2b0000 40%, #5c0000 60%, #300000 80%, #3d0000 100%);
+  border-left: 3px solid var(--gold);
+  box-shadow: -8px 0 25px rgba(0, 0, 0, 0.7);
+  transition: transform 1.8s cubic-bezier(0.76, 0, 0.24, 1);
+  will-change: transform;
+}
+
+/* ============================
+   WIDGET ĐĨA HÁT CỔ ĐIỂN & NỐT NHẠC
+   ============================ */
+@keyframes spin-vinyl {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.vinyl-spin {
+  animation: spin-vinyl 6s linear infinite;
+  will-change: transform;
+}
+
+@keyframes float-note {
+  0% {
+    transform: translateY(0) translateX(0) scale(0.7);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-45px) translateX(var(--x-offset, 10px)) scale(1.1);
+    opacity: 0;
+  }
+}
+
+.music-note {
+  animation: float-note 2s ease-in-out infinite;
+  will-change: transform, opacity;
+}
